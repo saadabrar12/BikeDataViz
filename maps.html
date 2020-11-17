@@ -8,22 +8,55 @@
 </head>
 <body>
     <div id="main">
-        <div class="btn-group btn-group-sm" data-toggle="buttons">
-            <label class="btn btn-secondary"  data-type="cleared">
-                <input type="checkbox" name="options" autocomplete="off">Cleared
-            </label>
-            <label class="btn btn-secondary active" data-type="node_links">
-                <input type="checkbox" name="options" autocomplete="off" checked>Nodes/Links
-            </label>
-            <label class="btn btn-secondary"  data-type="states">
-                <input type="checkbox" name="options" autocomplete="off">States
-            </label> 
-            <label class="btn btn-secondary"  data-type="triangle_bins">
-                <input type="checkbox" name="options" autocomplete="off"> Triangle Bins
-            </label>                       
-        </div>
-        <div id="map" style="height: 640px; width: 680px; border: 1px solid #777;"></div>
+        <b>Starting Location</b>
+        <select id="StartAttrSelector" onchange="onStartChanged()">
+            <option value="Abner Clay Park">Abner Clay Park</option>
+	    	<option value="Biotech Park">Biotech Park</option>
+	    	<option value="Broad & Harrison">Broad & Harrison </option>
+            <option value="Broad & Lombardy">Broad & Lombardy</option>
+            <option value="Brown's Island">Brown's Island</option>
+            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
+            <option value="Canal Walk">Canal Walk</option>
+            <option value="City Hall">City Hall</option>
+            <option value="Jefferson Ave">Jefferson Ave </option>
+            <option value="Kanawha Plaza">Kanawha Plaza</option>
+            <option value="Monroe Park">Monroe Park</option>
+            <option value="Petronius Jones Park-Randolph">Petronius Jones Park-Randolph</option>
+            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
+            <option value="Science Museum">Science Museum</option>
+	    	<option value="Scott's Addition">Scott's Addition</option>
+            <option value="Sydney Park">Sydney Park</option>
+	    	<option value="Warehouse">Warehouse</option>
+	    </select>  
+        <b>Ending Location</b>
+        <select id="EndAttrSelector" onchange="onEndChanged()">
+	    	<option value="Abner Clay Park">Abner Clay Park</option>
+	    	<option value="Biotech Park">Biotech Park</option>
+	    	<option value="Broad & Harrison">Broad & Harrison </option>
+            <option value="Broad & Lombardy">Broad & Lombardy</option>
+            <option value="Brown's Island">Brown's Island</option>
+            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
+            <option value="Canal Walk">Canal Walk</option>
+            <option value="City Hall">City Hall</option>
+            <option value="Jefferson Ave">Jefferson Ave </option>
+            <option value="Kanawha Plaza">Kanawha Plaza</option>
+            <option value="Monroe Park">Monroe Park</option>
+            <option value="Petronius Jones Park-Randolph">Petronius Jones Park-Randolph</option>
+            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
+            <option value="Science Museum">Science Museum</option>
+	    	<option value="Scott's Addition">Scott's Addition</option>
+            <option value="Sydney Park">Sydney Park</option>
+            <option value="Downtown YMCA">Downtown YMCA</option> 
+            <option value="Warehouse">Warehouse</option>
+        </select>
+        <b>Bike Type</b>
+        <select id="BikeAttrSelector" onchange="onTypeChanged()">
+	    	<option value="Pedelec">Pedelec</option>
+	    	<option value="Bike">Bike</option>
+	    </select>
+        <div id="map" style="height: 900px; width: 900px; border: 1px solid #777;"></div>
         
+          
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
