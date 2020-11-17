@@ -5,6 +5,18 @@ var m = 0;
 var v = 420;
 var heat;
 
+var YearMonths = [
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 var myIcon = L.icon({
   iconUrl: "small-bike-512.png",
   iconSize: [35, 35],
@@ -12,6 +24,12 @@ var myIcon = L.icon({
   popupAnchor: [-3, -76],
   shadowSize: [68, 95],
   shadowAnchor: [22, 94],
+});
+
+d3.select("#timeslide").on("input", function () {
+  m = +this.value;
+  document.getElementById("range").innerHTML = YearMonths[+this.value];
+  drawHeatmap();
 });
 
 function onStartChanged() {
@@ -167,9 +185,9 @@ function extractLocation(monthFilteredData) {
 }
 
 function drawHeatmap() {
-  console.log(heatmapData["dict"][0]);
+  console.log(heatmapData["dict"][m]);
 
-  locations = extractLocation(heatmapData["dict"][0]);
+  locations = extractLocation(heatmapData["dict"][m]);
 
   drawMarkers();
 
