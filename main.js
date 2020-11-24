@@ -4,6 +4,8 @@ var t = "Pedelec";
 var m = 0;
 var v = 420;
 var heat;
+var markers = [];
+var popups = [];
 
 var YearMonths = [
   "April",
@@ -21,7 +23,7 @@ var myIcon = L.icon({
   iconUrl: "small-bike-512.png",
   iconSize: [35, 35],
   iconAnchor: [12, 35],
-  popupAnchor: [-3, -76],
+  popupAnchor: [0, -30],
   shadowSize: [68, 95],
   shadowAnchor: [22, 94],
 });
@@ -143,7 +145,7 @@ var heatmapData;
 
 Promise.all([d3.json("heatmap.json")]).then(function (data) {
   heatmapData = data[0];
-  console.log("Hello!");
+  //console.log("Hello!");
   //RouteDetails = data[1];
   //console.log(RouteDetails);
   drawHeatmap();
@@ -160,8 +162,21 @@ function drawMarkers() {
   for (let [k, v] of Object.entries(mapMarkers)) {
     var marker = L.marker(v, { icon: myIcon }).addTo(map);
     var popup = marker.bindPopup(k);
+    //console.log(popup);
+    markers.push(marker);
+    popups.push(popup);
     //popup.openPopup();
   }
+  //for (var i = 0; i < markers.length; i++) {
+  //  console.log(popups[i]);
+  //markers[i].bindPopup("Popup content");
+  //  markers[i].on("mouseover", function (e) {
+  //    popups[i].openPopup();
+  //  });
+  //  markers[i].on("mouseout", function (e) {
+  //    popups[i].closePopup();
+  //  });
+  //}
 }
 
 function extractLocation(monthFilteredData) {
@@ -185,7 +200,7 @@ function extractLocation(monthFilteredData) {
 }
 
 function drawHeatmap() {
-  console.log(heatmapData["dict"][m]);
+  //console.log(heatmapData["dict"][m]);
 
   locations = extractLocation(heatmapData["dict"][m]);
 
@@ -198,7 +213,7 @@ function drawHeatmap() {
     heat = L.heatLayer(locations, {
       radius: 6,
       blur: 5,
-      maxZoom: 17,
+      maxZoom: 19,
     }).addTo(map);
   }
 }
