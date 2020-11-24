@@ -9,15 +9,6 @@ var padding = { t: 60, r: 40, b: 30, l: 120 };
 var chartWidth = svgWidth - padding.l - padding.r;
 var chartHeight = svgHeight - padding.t - padding.b;
 
-polylinePoints = [
-  [37.56024333, -77.46600667],
-  [37.56022833, -77.46598167],
-  [37.56021, -77.46595667],
-  [37.55812167, -77.46252333],
-  [37.55736667, -77.46175833],
-  [37.55678833, -77.460815],
-];
-
 var xscale = d3.scaleLinear().range([padding.l, chartWidth]);
 var yscale = d3.scaleLinear().range([chartHeight, chartHeight / 2 + padding.t]);
 var yscale2 = d3.scaleLinear().range([chartHeight / 2, padding.t]);
