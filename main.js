@@ -127,7 +127,7 @@ var endLocMap = {
   "Main Library": 21,
 };
 
-var map = L.map("map").setView([37.56032167, -77.46614], 13);
+var map = L.map("map").setView([37.56032167, -77.46614], 14);
 mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
 L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "&copy; " + mapLink + " Contributors",
@@ -183,17 +183,10 @@ function extractLocation(monthFilteredData) {
   startLoc = startLocMap[s];
   endLoc = endLocMap[e];
   if (t === "Bike") {
-    //console.log("KireBhai!");
     v = 0;
   } else {
     v = 420;
   }
-  //console.log(
-  //  monthFilteredData["place_pairs"][21 * (startLoc - 1) + endLoc - 1]["Start"]
-  //);
-  //console.log(
-  //  monthFilteredData["place_pairs"][21 * (startLoc - 1) + endLoc - 1]["End"]
-  //);
   return monthFilteredData["place_pairs"][v + 21 * (startLoc - 1) + endLoc - 1][
     "Locations"
   ];
