@@ -88,6 +88,11 @@ Promise.all([
   drawChart(route_info, GPS_routes);
 });
 
+var legendColor = d3
+  .scaleOrdinal()
+  .domain(["Bike", "Pedelec"])
+  .range(d3.schemeSet2);
+
 function scaleBikeDuration(duration) {
   return yscale(duration);
 }
@@ -109,6 +114,8 @@ function drawChart(route_info, GPS_routes) {
   d3.select("svg")
     .append("g")
     .attr("transform", "translate(0," + (svgHeight - 70) + ")")
+    .transition()
+    .duration(750)
     .call(d3.axisBottom(xscale).ticks(15));
 
   //Adding Y-axis
@@ -124,6 +131,8 @@ function drawChart(route_info, GPS_routes) {
   d3.select("svg")
     .append("g")
     .attr("transform", "translate(100,0)")
+    .transition()
+    .duration(750)
     .call(d3.axisLeft(yscale).ticks(6));
 
   //Adding y-axis 2
@@ -131,6 +140,8 @@ function drawChart(route_info, GPS_routes) {
   d3.select("svg")
     .append("g")
     .attr("transform", "translate(100,0)")
+    .transition()
+    .duration(750)
     .call(d3.axisLeft(yscale2).ticks(6));
 
   //Adding size for cost
@@ -166,14 +177,40 @@ function drawChart(route_info, GPS_routes) {
         );
       }
     });
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Duration (min)")
+    .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 30] + ")");
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Distance Travelled (miles)")
+    .attr(
+      "transform",
+      "translate(" + [30, svgHeight / 4 + 70] + ") rotate(-90)"
+    );
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Distance Travelled (miles)")
+    .attr(
+      "transform",
+      "translate(" + [30, (svgHeight * 3) / 4 + 50] + ") rotate(-90)"
+    );
+
   var circleEnter = routeEnter
     .append("circle")
     .attr("r", function (d) {
       return rscale(+d.cost);
     })
     .style("fill", function (d) {
-      if (d.type === "Bike") return "#d64d3f";
-      else return "#96ac3d";
+      return legendColor(d.type);
+      //if (d.type === "Bike") return "#d64d3f";
+      //else return "#96ac3d";
     });
 
   circleEnter
@@ -188,5 +225,27 @@ function drawChart(route_info, GPS_routes) {
       d3.select(this).call(tooltip.hide);
       if (polyline) map2.removeLayer(polyline);
     });
-  //  tooltip.hide;
+
+  svg
+    .selectAll("labels")
+    .data(["Bike", "Pedelec"])
+    .enter()
+    .append("text")
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .attr("x", 1300)
+    .attr("y", function (d, i) {
+      return 30 + i * 25;
+    }) // 100 is where the first dot appears. 25 is the distance between dots
+    .style("fill", function (d) {
+      return legendColor(d);
+    })
+    .text(function (d) {
+      return d;
+    })
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle");
+
+  //Adding legend
+  svg.selec;
 }
