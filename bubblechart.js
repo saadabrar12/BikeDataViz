@@ -2,6 +2,7 @@ var svg = d3.select("svg");
 
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
+console.log(svgHeight);
 var polyline;
 var GPS_routes;
 
@@ -13,7 +14,7 @@ var chartHeight = svgHeight - padding.t - padding.b;
 var xscale = d3.scaleLinear().range([padding.l, chartWidth]);
 var yscale = d3.scaleLinear().range([chartHeight, chartHeight / 2 + padding.t]);
 var yscale2 = d3.scaleLinear().range([chartHeight / 2, padding.t]);
-var rscale = d3.scaleSqrt().range([0, 10]);
+var rscale = d3.scaleSqrt().range([0, 12]);
 var colorScale = d3.scaleQuantize().range(["#d64d3f", "#96ac3d"]);
 
 var map2 = L.map("routemap").setView([37.56032167, -77.46614], 13);
@@ -29,8 +30,35 @@ var tooltip = d3
   .offset([-12, 0])
   .html(function (d) {
     //polyline = L.polyline(GPS_routes[d.routeId], { weight: 10 }).addTo(map2);
-    console.log("Hello");
-    return "<h5>" + d.routeId + "</h5>";
+    //console.log("Hello");
+    var avaliable = "No";
+    if (GPS_routes[d.routeId]) {
+      avaliable = "Yes";
+    }
+    return (
+      "<h5>" +
+      d.routeId +
+      "</h5><table><thead><tr><td>Start</td><td>End</td><td>RFID</td><td>Membership</td><td>Avaliability of GPS Data</td></tr></thead>" +
+      "<tbody><tr><td>" +
+      d.start +
+      "</td><td>" +
+      d.end +
+      "</td><td>" +
+      d.rfidType +
+      "</td><td>" +
+      d.membership +
+      "</td><td>" +
+      avaliable +
+      "</td></tr></tbody>" +
+      "<thead><tr><td>Distance</td><td colspan='2'>Duration</td><td>Cost</td></tr></thead>" +
+      "<tbody><tr><td>" +
+      d.distance +
+      "</td><td colspan='2'>" +
+      d.duration +
+      "</td><td>" +
+      d.cost +
+      "</td></tr></tbody></table>"
+    );
   });
 
 svg.call(tooltip);
@@ -44,6 +72,10 @@ Promise.all([
         distance: +row["Distance"],
         type: row["Type"],
         duration: +row["Duration (min)"],
+        membership: row["Membership"],
+        rfidType: row["RFID"],
+        start: row["Start"],
+        end: row["End"],
       };
       return routes;
     }
@@ -76,7 +108,7 @@ function drawChart(route_info, GPS_routes) {
   xscale.domain(distanceExtent);
   d3.select("svg")
     .append("g")
-    .attr("transform", "translate(0,1350)")
+    .attr("transform", "translate(0," + (svgHeight - 70) + ")")
     .call(d3.axisBottom(xscale).ticks(15));
 
   //Adding Y-axis
@@ -145,14 +177,16 @@ function drawChart(route_info, GPS_routes) {
     });
 
   circleEnter
-    .on("mouseover", function(d) {
+    .on("mouseover", function (d) {
       //console.log(this)
-      tooltip.show(d)
-      polyline = L.polyline(GPS_routes[d.routeId], { weight: 5 }).addTo(map2);
+      tooltip.show(d);
+      if (GPS_routes[d.routeId]) {
+        polyline = L.polyline(GPS_routes[d.routeId], { weight: 8 }).addTo(map2);
+      }
     })
-    .on("mouseout", function(d){
+    .on("mouseout", function (d) {
       d3.select(this).call(tooltip.hide);
-      map2.removeLayer(polyline);
+      if (polyline) map2.removeLayer(polyline);
     });
   //  tooltip.hide;
 }
