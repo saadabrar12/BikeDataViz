@@ -4,6 +4,11 @@ circle {
   stroke-width: 0.5;
   opacity: 0.7;
 }
+.circle:hover{
+  stroke: black;
+  stroke-width: 0.6;
+}
+
 path.stroke-polyline {
   filter: drop-shadow(1px 1px 0 #fff) drop-shadow(-1px -1px 0 #fff)
     drop-shadow(1px -1px 0 #fff) drop-shadow(-1px 1px 0 #fff);

@@ -3,6 +3,7 @@ var svg = d3.select("svg");
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 var polyline;
+var GPS_routes;
 
 var padding = { t: 60, r: 40, b: 30, l: 120 };
 
@@ -12,7 +13,7 @@ var chartHeight = svgHeight - padding.t - padding.b;
 var xscale = d3.scaleLinear().range([padding.l, chartWidth]);
 var yscale = d3.scaleLinear().range([chartHeight, chartHeight / 2 + padding.t]);
 var yscale2 = d3.scaleLinear().range([chartHeight / 2, padding.t]);
-var rscale = d3.scaleSqrt().range([0, 5]);
+var rscale = d3.scaleSqrt().range([0, 10]);
 var colorScale = d3.scaleQuantize().range(["#d64d3f", "#96ac3d"]);
 
 var map2 = L.map("routemap").setView([37.56032167, -77.46614], 13);
@@ -22,15 +23,18 @@ L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 18,
 }).addTo(map2);
 
-var toolTip = d3
+var tooltip = d3
   .tip()
   .attr("class", "d3-tip")
   .offset([-12, 0])
   .html(function (d) {
+    //polyline = L.polyline(GPS_routes[d.routeId], { weight: 10 }).addTo(map2);
+    console.log("Hello");
     return "<h5>" + d.routeId + "</h5>";
   });
 
-svg.call(toolTip);
+svg.call(tooltip);
+
 Promise.all([
   d3.csv("route_reports.csv", function (row) {
     if (+row["Duration (min)"] < 12000) {
@@ -47,7 +51,7 @@ Promise.all([
   d3.json("route_id_locations.json"),
 ]).then(function (data) {
   var route_info = data[0];
-  var GPS_routes = data[1];
+  GPS_routes = data[1];
   //draw;
   drawChart(route_info, GPS_routes);
 });
@@ -72,7 +76,7 @@ function drawChart(route_info, GPS_routes) {
   xscale.domain(distanceExtent);
   d3.select("svg")
     .append("g")
-    .attr("transform", "translate(0,550)")
+    .attr("transform", "translate(0,1350)")
     .call(d3.axisBottom(xscale).ticks(15));
 
   //Adding Y-axis
@@ -87,14 +91,14 @@ function drawChart(route_info, GPS_routes) {
 
   d3.select("svg")
     .append("g")
-    .attr("transform", "translate(80,0)")
+    .attr("transform", "translate(100,0)")
     .call(d3.axisLeft(yscale).ticks(6));
 
   //Adding y-axis 2
   yscale2.domain(DurationExtent);
   d3.select("svg")
     .append("g")
-    .attr("transform", "translate(80,0)")
+    .attr("transform", "translate(100,0)")
     .call(d3.axisLeft(yscale2).ticks(6));
 
   //Adding size for cost
@@ -130,7 +134,6 @@ function drawChart(route_info, GPS_routes) {
         );
       }
     });
-
   var circleEnter = routeEnter
     .append("circle")
     .attr("r", function (d) {
@@ -142,12 +145,14 @@ function drawChart(route_info, GPS_routes) {
     });
 
   circleEnter
-    .on("mouseover", function (d) {
-      polyline = L.polyline(GPS_routes[d.routeId], { weight: 10 }).addTo(map2);
-      return toolTip.show;
+    .on("mouseover", function(d) {
+      //console.log(this)
+      tooltip.show(d)
+      polyline = L.polyline(GPS_routes[d.routeId], { weight: 5 }).addTo(map2);
     })
-    .on("mouseout", function (d) {
+    .on("mouseout", function(d){
+      d3.select(this).call(tooltip.hide);
       map2.removeLayer(polyline);
-      return toolTip.hide;
     });
+  //  tooltip.hide;
 }
