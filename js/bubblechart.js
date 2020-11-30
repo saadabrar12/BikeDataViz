@@ -2,7 +2,6 @@ var svg = d3.select("svg");
 
 var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
-console.log(svgHeight);
 var polyline;
 var GPS_routes;
 
@@ -64,7 +63,7 @@ var tooltip = d3
 svg.call(tooltip);
 
 Promise.all([
-  d3.csv("route_reports.csv", function (row) {
+  d3.csv("./data/route_reports.csv", function (row) {
     if (+row["Duration (min)"] < 12000) {
       var routes = {
         routeId: row["Route ID"],
@@ -80,7 +79,7 @@ Promise.all([
       return routes;
     }
   }),
-  d3.json("route_id_locations.json"),
+  d3.json("./data/route_id_locations.json"),
 ]).then(function (data) {
   var route_info = data[0];
   GPS_routes = data[1];

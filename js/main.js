@@ -127,7 +127,7 @@ var endLocMap = {
   "Main Library": 21,
 };
 
-var map = L.map("map").setView([37.56032167, -77.46614], 14);
+var map = L.map("map").setView([37.532667, -77.434158], 14);
 mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
 L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "&copy; " + mapLink + " Contributors",
@@ -143,7 +143,7 @@ L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 var heatmapData;
 
-Promise.all([d3.json("heatmap.json")]).then(function (data) {
+Promise.all([d3.json("./data/heatmap.json")]).then(function (data) {
   heatmapData = data[0];
   //console.log("Hello!");
   //RouteDetails = data[1];
