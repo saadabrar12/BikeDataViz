@@ -1,80 +1,159 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lab 9 - Power Grid</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Richmond Bike Data Visualization</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+      integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
     <div id="main">
-        <b>Starting Location</b>
-        <select id="StartAttrSelector" onchange="onStartChanged()">
-            <option value="Abner Clay Park">Abner Clay Park</option>
-	    	<option value="Biotech Park">Biotech Park</option>
-	    	<option value="Broad & Harrison">Broad & Harrison </option>
-            <option value="Broad & Lombardy">Broad & Lombardy</option>
-            <option value="Brown's Island">Brown's Island</option>
-            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
-            <option value="Canal Walk">Canal Walk</option>
-            <option value="City Hall">City Hall</option>
-            <option value="Jefferson Ave">Jefferson Ave </option>
-            <option value="Kanawha Plaza">Kanawha Plaza</option>
-            <option value="Monroe Park">Monroe Park</option>
-            <option value="Petronius Jones Park-Randolph">Petronius Jones Park-Randolph</option>
-            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
-            <option value="Science Museum">Science Museum</option>
-	    	<option value="Scott's Addition">Scott's Addition</option>
-            <option value="Sydney Park">Sydney Park</option>
-	    	<option value="Warehouse">Warehouse</option>
-	    </select>  
-        <b>Ending Location</b>
-        <select id="EndAttrSelector" onchange="onEndChanged()">
-	    	<option value="Abner Clay Park">Abner Clay Park</option>
-	    	<option value="Biotech Park">Biotech Park</option>
-	    	<option value="Broad & Harrison">Broad & Harrison </option>
-            <option value="Broad & Lombardy">Broad & Lombardy</option>
-            <option value="Brown's Island">Brown's Island</option>
-            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
-            <option value="Canal Walk">Canal Walk</option>
-            <option value="City Hall">City Hall</option>
-            <option value="Jefferson Ave">Jefferson Ave </option>
-            <option value="Kanawha Plaza">Kanawha Plaza</option>
-            <option value="Monroe Park">Monroe Park</option>
-            <option value="Petronius Jones Park-Randolph">Petronius Jones Park-Randolph</option>
-            <option value="Pleasants Park-Oregon Hill">Pleasants Park-Oregon Hill
-            <option value="Science Museum">Science Museum</option>
-	    	<option value="Scott's Addition">Scott's Addition</option>
-            <option value="Sydney Park">Sydney Park</option>
-            <option value="Downtown YMCA">Downtown YMCA</option> 
-            <option value="Warehouse">Warehouse</option>
-        </select>
-        <b>Bike Type</b>
-        <select id="BikeAttrSelector" onchange="onTypeChanged()">
-	    	<option value="Pedelec">Pedelec</option>
-	    	<option value="Bike">Bike</option>
-	    </select>
-        <div id="map" style="height: 800px; width: 800px; border: 1px solid #777;"></div>
-        
-    
-        <div id="sliderContainer">
-            <input id="timeslide" type="range" min="0" max="8" value="0" step="1"/><br>
-            <span id="range">January</span>
-        </div>
-        
-    </div>
-</body>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-<script src="http://d3js.org/d3.v5.min.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-<script
-    src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js">
-</script>
-<script src="./main.js"></script>
+      <div>
+        <nav
+          class="navbar navbar-expand-lg navbar-light bg-light flex-row-reverse flex-sm-row d_z"
+          id="navbar"
+        >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse show">
+            <ul class="navbar-nav mr-auto d_C">
+              <li class="nav-item">
+                <a class="nav-link d_q d_D d_r" href="barplot.html"> System</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d_q d_D" href="bubblechart.html">Activity</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d_q d_D" href="">Station Analysis</a>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right d-none d-md-flex">
+              <li class="nav-item d_D">
+                <button
+                  type="button"
+                  class="btn btn-link nav-link showAll d-none d-md-block"
+                >
+                  <i class="fa fa-list fa-lg"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <b>Starting Location</b>
+      <select id="StartAttrSelector" onchange="onStartChanged()">
+        <option value="Abner Clay Park">Abner Clay Park</option>
+        <option value="Biotech Park">Biotech Park</option>
+        <option value="Broad & Harrison">Broad & Harrison</option>
+        <option value="Broad & Lombardy">Broad & Lombardy</option>
+        <option value="Brown's Island">Brown's Island</option>
+        <option value="Pleasants Park-Oregon Hill">
+          Pleasants Park-Oregon Hill
+        </option>
+        <option value="Canal Walk">Canal Walk</option>
+        <option value="City Hall">City Hall</option>
+        <option value="Jefferson Ave">Jefferson Ave</option>
+        <option value="Kanawha Plaza">Kanawha Plaza</option>
+        <option value="Monroe Park">Monroe Park</option>
+        <option value="Petronius Jones Park-Randolph">
+          Petronius Jones Park-Randolph
+        </option>
+        <option value="Pleasants Park-Oregon Hill">
+          Pleasants Park-Oregon Hill
+        </option>
+        <option value="Science Museum">Science Museum</option>
+        <option value="Scott's Addition">Scott's Addition</option>
+        <option value="Sydney Park">Sydney Park</option>
+        <option value="Warehouse">Warehouse</option>
+      </select>
+      <b>Ending Location</b>
+      <select id="EndAttrSelector" onchange="onEndChanged()">
+        <option value="Abner Clay Park">Abner Clay Park</option>
+        <option value="Biotech Park">Biotech Park</option>
+        <option value="Broad & Harrison">Broad & Harrison</option>
+        <option value="Broad & Lombardy">Broad & Lombardy</option>
+        <option value="Brown's Island">Brown's Island</option>
+        <option value="Pleasants Park-Oregon Hill">
+          Pleasants Park-Oregon Hill
+        </option>
+        <option value="Canal Walk">Canal Walk</option>
+        <option value="City Hall">City Hall</option>
+        <option value="Jefferson Ave">Jefferson Ave</option>
+        <option value="Kanawha Plaza">Kanawha Plaza</option>
+        <option value="Monroe Park">Monroe Park</option>
+        <option value="Petronius Jones Park-Randolph">
+          Petronius Jones Park-Randolph
+        </option>
+        <option value="Pleasants Park-Oregon Hill">
+          Pleasants Park-Oregon Hill
+        </option>
+        <option value="Science Museum">Science Museum</option>
+        <option value="Scott's Addition">Scott's Addition</option>
+        <option value="Sydney Park">Sydney Park</option>
+        <option value="Downtown YMCA">Downtown YMCA</option>
+        <option value="Warehouse">Warehouse</option>
+      </select>
+      <b>Bike Type</b>
+      <select id="BikeAttrSelector" onchange="onTypeChanged()">
+        <option value="Pedelec">Pedelec</option>
+        <option value="Bike">Bike</option>
+      </select>
+      <div
+        id="map"
+        style="height: 800px; width: 800px; border: 1px solid #777"
+      ></div>
 
+      <div id="sliderContainer">
+        <input
+          id="timeslide"
+          type="range"
+          min="0"
+          max="8"
+          value="0"
+          step="1"
+        /><br />
+        <span id="range">January</span>
+      </div>
+    </div>
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+    integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+    integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+    crossorigin="anonymous"
+  ></script>
+  <script src="http://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+  <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+  <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
+  <script src="./d3-tip.js"></script>
+  <script src="./main.js"></script>
 </html>
-    
