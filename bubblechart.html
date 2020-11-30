@@ -2,7 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Richmond Bike Data Visualization</title>
+    <title>Trip Statistics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>The Town HTML CSS Template</title>
+    <link rel="stylesheet" href="fontawesome-5.5/css/all.min.css" />
+    <link rel="stylesheet" href="slick/slick.css" />
+    <link rel="stylesheet" href="slick/slick-theme.css" />
+    <link rel="stylesheet" href="magnific-popup/magnific-popup.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/templatemo-style.css" />
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
@@ -16,47 +25,35 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div>
-      <nav
-        class="navbar navbar-expand-lg navbar-light bg-light flex-row-reverse flex-sm-row d_z"
-        id="navbar"
-      >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarTogglerDemo01"
-          aria-controls="navbarTogglerDemo01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse show">
-          <ul class="navbar-nav mr-auto d_C">
-            <li class="nav-item">
-              <a class="nav-link d_q d_D d_r" href="barplot.html"> System</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d_q d_D" href="bubblechart.html">Activity</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d_q d_D" href="maps.html">Station Analysis</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right d-none d-md-flex">
-            <li class="nav-item d_D">
-              <button
-                type="button"
-                class="btn btn-link nav-link showAll d-none d-md-block"
-              >
-                <i class="fa fa-list fa-lg"></i>
-              </button>
-            </li>
-          </ul>
+    <section id="hero" class="text-black tm-font-big tm-parallax">
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-md tm-navbar" id="tmNav">
+        <div class="container">
+          <div class="tm-next">
+            <a href="./" class="navbar-brand">The Town</a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link tm-nav-link" href="./barplot.html"
+                  >Aggregated Monthly Data</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link tm-nav-link" href="./bubblechart.html"
+                  >Trip Statistics</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link tm-nav-link" href="./maps.html"
+                  >Station Analysis</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
-    </div>
+    </section>
 
     <svg width="1400" height="800" , style="border: 1px solid #777"></svg>
     <div

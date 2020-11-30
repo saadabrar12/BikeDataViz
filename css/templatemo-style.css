@@ -34,7 +34,7 @@ a:focus {
 }
 
 .btn:hover {
-  background-color: #ced4da;
+  background-color: #000000;
 }
 
 .tm-section-pad-top {
@@ -50,7 +50,7 @@ a:focus {
 }
 
 .tm-btn-primary {
-  color: white;
+  color: rgb(10, 10, 10);
   background-color: #3496d8;
   padding: 14px 35px;
   border-radius: 30px;
@@ -58,7 +58,7 @@ a:focus {
 
 .tm-btn-primary:hover,
 .tm-btn-primary:focus {
-  color: white;
+  color: rgb(0, 0, 0);
   background-color: #73c1f6;
 }
 
@@ -73,12 +73,12 @@ a:focus {
 }
 
 .tm-navbar.scroll {
-  background-color: white;
-  border-bottom: 1px solid #e9ecef;
+  background-color: rgb(117, 107, 107);
+  border-bottom: 1px solid #244f7a;
 }
 
 .navbar-brand {
-  color: white;
+  color: rgb(5, 5, 5);
   font-size: 1.4rem;
   font-weight: bold;
 }
@@ -97,7 +97,7 @@ a:focus {
 }
 
 .tm-nav-link {
-  color: white;
+  color: rgb(14, 13, 13);
 }
 
 .tm-navbar.scroll .tm-nav-link {
@@ -130,14 +130,14 @@ a:focus {
 }
 
 /* Hero */
-
+/*
 #hero {
   background-image: url(../img/the-town-bg-01.jpg);
   background-repeat: no-repeat;
   height: 100vh;
   min-height: 375px;
   position: relative;
-}
+}*/
 
 @media (min-height: 830px) {
   #hero {

@@ -5,7 +5,7 @@ var colchartData;
 var prev_month = "April";
 var new_month = "April";
 
-var margin = { top: 20, right: 20, bottom: 30, left: 100 },
+var margin = { top: 50, right: 20, bottom: 30, left: 100 },
   width = 800 - margin.left - margin.right,
   height = 400 - margin.top - margin.bottom;
 
@@ -328,24 +328,26 @@ Promise.all([d3.json("./data/colchartdata.json")]).then(function (data) {
 });
 
 function drawbarchart(month) {
-  var data = colchartData[months.indexOf(month)].values;
+  var bar_data = colchartData[months.indexOf(month)].values;
+  console.log(bar_data);
 
-  data.forEach(function (d) {
+  bar_data.forEach(function (d) {
     //console.log(d.values[0].incoming)
-    d.total = d.incoming + d.outgoing;
+    //d.incoming=Math.abs(d.incoming);
+    d.total = Math.abs(d.incoming) + d.outgoing;
 
     d.incoming = -Math.abs(d.incoming);
     //d.total = d3.sum(d.values[0], k => k.incoming+k.outgoing)
     return d;
   });
 
-  data.sort((a, b) => d3.ascending(a.total, b.total));
-  console.log(data);
+  bar_data = bar_data.sort((a, b) => d3.ascending(a.total, b.total));
+  console.log(bar_data);
 
-  var groups = data.map(function (d) {
+  var groups = bar_data.map(function (d) {
     return d.Start;
   });
-  var subgroups = d3.keys(data[0]).slice(1, 3);
+  var subgroups = d3.keys(bar_data[0]).slice(1, 3);
   console.log(subgroups);
 
   console.log(groups);
@@ -382,7 +384,10 @@ function drawbarchart(month) {
   //x.domain(d3.extent(data, function(d) { return d.annual_growth; }));
 
   bar_x
-    .domain([d3.min(data, (d) => d.incoming), d3.max(data, (d) => d.outgoing)])
+    .domain([
+      d3.min(bar_data, (d) => d.incoming),
+      d3.max(bar_data, (d) => d.outgoing),
+    ])
     .nice();
 
   bar_svg
@@ -406,7 +411,7 @@ function drawbarchart(month) {
   var stackedData = d3
     .stack()
     .keys(subgroups.reverse())
-    .offset(d3.stackOffsetDiverging)(data);
+    .offset(d3.stackOffsetDiverging)(bar_data);
 
   //bar_svg.selectAll("g").exit().remove()
   console.log(stackedData);
@@ -415,34 +420,35 @@ function drawbarchart(month) {
 
   //console.log(bar_groups_g.selectAll("dash"))
   //bar_groups_g.selectAll("dash").exit().remove();
+  var bar_groups = bar_svg.selectAll(".dash").data(stackedData);
 
-  var bar_groups = bar_svg
-    .append("g")
-    .attr("class", "dash")
-    .selectAll("foo")
-    .data(stackedData);
+  bar_groups.exit().remove();
 
-  bar_groups.selectAll("dash").exit().remove();
-
-  var bars = bar_groups
+  bar_groups
     .enter()
     .append("g")
+    .classed("dash", true)
     .attr("fill", function (d) {
       console.log(d.key);
       return bar_color(d.key);
-    })
+    });
+
+  var bars = bar_svg
+    .selectAll(".dash")
+    //.enter().append("g")
     .selectAll("rect")
     .data(function (d) {
       return d;
     });
-
-  bars.selectAll("g").exit().remove();
-  bars.selectAll("g.foo").exit().remove();
-  bars = bars.enter().append("rect").attr("class", "foo").merge(bars);
-
+  //bars.selectAll("g.rect").exit().remove();
+  //bars.selectAll("g.foo").exit().remove();
+  //bars.selectAll("g").exit().remove();
   bars
+    .enter()
+    .append("rect")
+    .merge(bars)
     .transition()
-    .duration(750)
+    .duration(2000)
     .attr("y", function (d) {
       return bar_y(d.data.Start);
     }) //.attr("x", function(d) { return x(d.data.State); })
@@ -452,7 +458,11 @@ function drawbarchart(month) {
     }) //.attr("y", function(d) { return y(d[1]); })
     .attr("width", function (d) {
       return bar_x(d[1]) - bar_x(d[0]);
-    }); //.attr("height", function(d) { return y(d[0]) - y(d[1]); }) //.attr("width", x.bandwidth());
+    }); //.attr("height", function(d) { return y(d[0]) - y(d[1]); })
+
+  bars.exit().remove();
+
+  //.attr("width", x.bandwidth());
   //console.log(this);
   //Legend
   var legend = bar_svg
@@ -461,14 +471,15 @@ function drawbarchart(month) {
     .enter()
     .append("g")
     .attr("class", "legend")
-    .attr("transform", function (d, i) {
-      return "translate(0," + i * 30 + ")";
-    })
+    //.attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
     .style("opacity", "0");
 
   legend
     .append("rect")
-    .attr("x", width - 18)
+    .attr("y", -20)
+    .attr("x", function (d, i) {
+      return margin.left + i * 70 - 30;
+    })
     .attr("width", 18)
     .attr("height", 18)
     .style("fill", function (d) {
@@ -477,10 +488,12 @@ function drawbarchart(month) {
 
   legend
     .append("text")
-    .attr("x", width - 24)
-    .attr("y", 9)
+    .attr("y", -20)
+    .attr("x", function (d, i) {
+      return margin.left + i * 70 - 70;
+    })
     .attr("dy", ".35em")
-    .style("text-anchor", "end")
+    .style("text-anchor", "start")
     .text(function (d) {
       return d;
     });
@@ -489,7 +502,7 @@ function drawbarchart(month) {
     .transition()
     .duration(500)
     .delay(function (d, i) {
-      return 1300 + 100 * i;
+      return 2000;
     })
     .style("opacity", "1");
 }
