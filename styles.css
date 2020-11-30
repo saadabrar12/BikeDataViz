@@ -11,6 +11,13 @@ circle:hover {
   fill-opacity: 1;
 }
 
+.selected {
+  stroke: black;
+  stroke-width: 0.6;
+  opacity: 0.8;
+  fill-opacity: 1;
+}
+
 .d3-tip {
   line-height: 1;
   padding: 6px;
@@ -66,4 +73,36 @@ path.stroke-polyline {
 }
 #main {
   margin: 20px;
+}
+.flex-row-reverse {
+  -ms-flex-direction: row-reverse !important;
+  flex-direction: row-reverse !important;
+}
+
+.navbar {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+.navbar-toggler {
+  padding: 0.25rem 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+button,
+select {
+  text-transform: none;
+}
+.bg-light {
+  background-color: #f8f9fa !important;
 }

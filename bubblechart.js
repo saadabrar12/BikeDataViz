@@ -114,8 +114,6 @@ function drawChart(route_info, GPS_routes) {
   d3.select("svg")
     .append("g")
     .attr("transform", "translate(0," + (svgHeight - 70) + ")")
-    .transition()
-    .duration(750)
     .call(d3.axisBottom(xscale).ticks(15));
 
   //Adding Y-axis
@@ -131,8 +129,6 @@ function drawChart(route_info, GPS_routes) {
   d3.select("svg")
     .append("g")
     .attr("transform", "translate(100,0)")
-    .transition()
-    .duration(750)
     .call(d3.axisLeft(yscale).ticks(6));
 
   //Adding y-axis 2
@@ -212,6 +208,16 @@ function drawChart(route_info, GPS_routes) {
       //if (d.type === "Bike") return "#d64d3f";
       //else return "#96ac3d";
     });
+  /*
+  svg.call(
+    d3
+      .brush()
+      .extent([
+        [, 0],
+        [svgWidth, svgHeight],
+      ])
+      .on("start brush", updateChart)
+  );*/
 
   circleEnter
     .on("mouseover", function (d) {
@@ -245,7 +251,31 @@ function drawChart(route_info, GPS_routes) {
     })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
+  /*
+  function updateChart() {
+    extent = d3.event.selection;
+    console.log("Hl");
+    circleEnter.classed("selected", function (d) {
+      return isBrushed(
+        extent,
+        xscale(d.duration),
+        yscale(d.distance),
+        yscale2(d.distance)
+      );
+    });
+  }
 
-  //Adding legend
-  svg.selec;
+  // A function that return TRUE or FALSE according if a dot is in the selection or not
+  function isBrushed(brush_coords, cx, cy, cy2) {
+    var x0 = brush_coords[0][0],
+      x1 = brush_coords[1][0],
+      y0 = brush_coords[0][1],
+      y1 = brush_coords[1][1];
+    return (
+      x0 <= cx &&
+      cx <= x1 &&
+      ((y0 <= cy && cy <= y1) || (y0 <= cy2 && cy2 <= y1))
+    ); // This return TRUE or FALSE depending on if the points is in the selected area
+  }
+  */
 }

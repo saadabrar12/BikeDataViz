@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Lab 9 - Power Grid</title>
+    <title>Richmond Bike Data Visualization</title>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
@@ -17,6 +17,47 @@
   </head>
   <body>
     <div id="main">
+      <div>
+        <nav
+          class="navbar navbar-expand-lg navbar-light bg-light flex-row-reverse flex-sm-row d_z"
+          id="navbar"
+        >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse show">
+            <ul class="navbar-nav mr-auto d_C">
+              <li class="nav-item">
+                <a class="nav-link d_q d_D d_r" href="barplot.html"> System</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d_q d_D" href="bubblechart.html">Activity</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link d_q d_D" href="">Station Analysis</a>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right d-none d-md-flex">
+              <li class="nav-item d_D">
+                <button
+                  type="button"
+                  class="btn btn-link nav-link showAll d-none d-md-block"
+                >
+                  <i class="fa fa-list fa-lg"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
       <b>Starting Location</b>
       <select id="StartAttrSelector" onchange="onStartChanged()">
         <option value="Abner Clay Park">Abner Clay Park</option>
@@ -91,12 +132,6 @@
         /><br />
         <span id="range">January</span>
       </div>
-
-      <svg width="1400" height="800" , style="border: 1px solid #777"></svg>
-      <div
-        id="routemap"
-        style="height: 800px; width: 800px; border: 1px solid #777"
-      ></div>
     </div>
   </body>
   <script
@@ -121,5 +156,4 @@
   <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="./d3-tip.js"></script>
   <script src="./main.js"></script>
-  <script src="./bubblechart.js"></script>
 </html>
