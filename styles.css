@@ -71,8 +71,8 @@ path.stroke-polyline {
   filter: drop-shadow(1px 1px 0 #fff) drop-shadow(-1px -1px 0 #fff)
     drop-shadow(1px -1px 0 #fff) drop-shadow(-1px 1px 0 #fff);
 }
-#main {
-  margin: 20px;
+#heatmapviz {
+  margin: 50px;
 }
 .flex-row-reverse {
   -ms-flex-direction: row-reverse !important;
@@ -105,4 +105,29 @@ select {
 }
 .bg-light {
   background-color: #f8f9fa !important;
+}
+aside {
+  width: 20%;
+  padding-left: 15px;
+  margin-left: 15px;
+  float: left;
+  font-style: bold;
+  background-color: lightgray;
+}
+
+row {
+  box-sizing: border-box;
+}
+body {
+  color: black;
+  text-align: center;
+}
+h5 {
+  display: block;
+  font-size: 0.83em;
+  margin-block-start: 1.67em;
+  margin-block-end: 1.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
 }

@@ -187,7 +187,7 @@ function drawChart(route_info, GPS_routes) {
   svg
     .append("text")
     .attr("class", "axis-label")
-    .text("Duration (min)")
+    .text("Distance Travelled (miles)")
     .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 30] + ")")
     .attr("font-size", "20px")
     .attr("font-weight", "bold")

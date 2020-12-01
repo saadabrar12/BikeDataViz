@@ -13,120 +13,152 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
     />
-    <link rel="stylesheet" href="./styles.css" />
+
     <link rel="stylesheet" href="fontawesome-5.5/css/all.min.css" />
     <link rel="stylesheet" href="slick/slick.css" />
     <link rel="stylesheet" href="slick/slick-theme.css" />
     <link rel="stylesheet" href="magnific-popup/magnific-popup.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/templatemo-style.css" />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <section id="hero" class="text-black tm-font-big tm-parallax">
-      <!-- Navigation -->
-      <nav class="navbar navbar-expand-md tm-navbar" id="tmNav">
-        <div class="container">
-          <div class="tm-next">
-            <a href="./" class="navbar-brand">The Town</a>
-          </div>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <a class="nav-link tm-nav-link" href="./barplot.html"
-                  >Aggregated Monthly Data</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link tm-nav-link" href="./bubblechart.html"
-                  >Trip Statistics</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link tm-nav-link" href="./maps.html"
-                  >Station Analysis</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </section>
-    <div id="main">
-      <b>Starting Location</b>
-      <select id="StartAttrSelector" onchange="onStartChanged()">
-        <option value="Abner Clay Park">Abner Clay Park</option>
-        <option value="Biotech Park">Biotech Park</option>
-        <option value="Broad & Harrison">Broad & Harrison</option>
-        <option value="Broad & Lombardy">Broad & Lombardy</option>
-        <option value="Brown's Island">Brown's Island</option>
-        <option value="Pleasants Park-Oregon Hill">
-          Pleasants Park-Oregon Hill
-        </option>
-        <option value="Canal Walk">Canal Walk</option>
-        <option value="City Hall">City Hall</option>
-        <option value="Jefferson Ave">Jefferson Ave</option>
-        <option value="Kanawha Plaza">Kanawha Plaza</option>
-        <option value="Monroe Park">Monroe Park</option>
-        <option value="Petronius Jones Park-Randolph">
-          Petronius Jones Park-Randolph
-        </option>
-        <option value="Pleasants Park-Oregon Hill">
-          Pleasants Park-Oregon Hill
-        </option>
-        <option value="Science Museum">Science Museum</option>
-        <option value="Scott's Addition">Scott's Addition</option>
-        <option value="Sydney Park">Sydney Park</option>
-        <option value="Warehouse">Warehouse</option>
-      </select>
-      <b>Ending Location</b>
-      <select id="EndAttrSelector" onchange="onEndChanged()">
-        <option value="Abner Clay Park">Abner Clay Park</option>
-        <option value="Biotech Park">Biotech Park</option>
-        <option value="Broad & Harrison">Broad & Harrison</option>
-        <option value="Broad & Lombardy">Broad & Lombardy</option>
-        <option value="Brown's Island">Brown's Island</option>
-        <option value="Pleasants Park-Oregon Hill">
-          Pleasants Park-Oregon Hill
-        </option>
-        <option value="Canal Walk">Canal Walk</option>
-        <option value="City Hall">City Hall</option>
-        <option value="Jefferson Ave">Jefferson Ave</option>
-        <option value="Kanawha Plaza">Kanawha Plaza</option>
-        <option value="Monroe Park">Monroe Park</option>
-        <option value="Petronius Jones Park-Randolph">
-          Petronius Jones Park-Randolph
-        </option>
-        <option value="Pleasants Park-Oregon Hill">
-          Pleasants Park-Oregon Hill
-        </option>
-        <option value="Science Museum">Science Museum</option>
-        <option value="Scott's Addition">Scott's Addition</option>
-        <option value="Sydney Park">Sydney Park</option>
-        <option value="Downtown YMCA">Downtown YMCA</option>
-        <option value="Warehouse">Warehouse</option>
-      </select>
-      <b>Bike Type</b>
-      <select id="BikeAttrSelector" onchange="onTypeChanged()">
-        <option value="Pedelec">Pedelec</option>
-        <option value="Bike">Bike</option>
-      </select>
-      <div
-        id="map"
-        style="height: 800px; width: 1623px; border: 1px solid #777"
-      ></div>
-
-      <div id="sliderContainer">
-        <input
-          id="timeslide"
-          type="range"
-          min="0"
-          max="8"
-          value="0"
-          step="1"
-        /><br />
-        <span id="range">January</span>
+    <section id="main">
+      <div class="row">
+        <section id="hero" class="text-black tm-font-big tm-parallax">
+          <!-- Navigation -->
+          <nav class="navbar navbar-expand-md tm-navbar" id="tmNav">
+            <div class="container">
+              <div class="tm-next">
+                <a href="./" class="navbar-brand">The Town</a>
+              </div>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link tm-nav-link" href="./barplot.html"
+                      >Aggregated Monthly Data</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link tm-nav-link" href="./bubblechart.html"
+                      >Trip Statistics</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link tm-nav-link" href="./maps.html"
+                      >Station Analysis</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </section>
       </div>
-    </div>
+      <div class="row" id="heatmapviz">
+        <div class="column">
+          <aside class="sidepanel" style="width: 300px">
+            <div id="filter">
+              <div class="row">
+                <div>Filter</div>
+              </div>
+              <hr class="divider" />
+              <hr class="divider" />
+              <div class="row">
+                <h5>Starting Location</h5>
+                <select id="StartAttrSelector" onchange="onStartChanged()">
+                  <option value="All">All</option>
+                  <option value="Abner Clay Park">Abner Clay Park</option>
+                  <option value="Biotech Park">Biotech Park</option>
+                  <option value="Broad & Harrison">Broad & Harrison</option>
+                  <option value="Broad & Lombardy">Broad & Lombardy</option>
+                  <option value="Brown's Island">Brown's Island</option>
+                  <option value="Pleasants Park-Oregon Hill">
+                    Pleasants Park-Oregon Hill
+                  </option>
+                  <option value="Canal Walk">Canal Walk</option>
+                  <option value="City Hall">City Hall</option>
+                  <option value="Jefferson Ave">Jefferson Ave</option>
+                  <option value="Kanawha Plaza">Kanawha Plaza</option>
+                  <option value="Monroe Park">Monroe Park</option>
+                  <option value="Petronius Jones Park-Randolph">
+                    Petronius Jones Park-Randolph
+                  </option>
+                  <option value="Pleasants Park-Oregon Hill">
+                    Pleasants Park-Oregon Hill
+                  </option>
+                  <option value="Science Museum">Science Museum</option>
+                  <option value="Scott's Addition">Scott's Addition</option>
+                  <option value="Sydney Park">Sydney Park</option>
+                  <option value="Warehouse">Warehouse</option>
+                </select>
+              </div>
+              <hr class="divider" />
+              <div class="row">
+                <h5>Ending Location</h5>
+                <select id="EndAttrSelector" onchange="onEndChanged()">
+                  <option value="All">All</option>
+                  <option value="Abner Clay Park">Abner Clay Park</option>
+                  <option value="Biotech Park">Biotech Park</option>
+                  <option value="Broad & Harrison">Broad & Harrison</option>
+                  <option value="Broad & Lombardy">Broad & Lombardy</option>
+                  <option value="Brown's Island">Brown's Island</option>
+                  <option value="Pleasants Park-Oregon Hill">
+                    Pleasants Park-Oregon Hill
+                  </option>
+                  <option value="Canal Walk">Canal Walk</option>
+                  <option value="City Hall">City Hall</option>
+                  <option value="Jefferson Ave">Jefferson Ave</option>
+                  <option value="Kanawha Plaza">Kanawha Plaza</option>
+                  <option value="Monroe Park">Monroe Park</option>
+                  <option value="Petronius Jones Park-Randolph">
+                    Petronius Jones Park-Randolph
+                  </option>
+                  <option value="Pleasants Park-Oregon Hill">
+                    Pleasants Park-Oregon Hill
+                  </option>
+                  <option value="Science Museum">Science Museum</option>
+                  <option value="Scott's Addition">Scott's Addition</option>
+                  <option value="Sydney Park">Sydney Park</option>
+                  <option value="Downtown YMCA">Downtown YMCA</option>
+                  <option value="Warehouse">Warehouse</option>
+                </select>
+              </div>
+              <hr class="divider" />
+              <div class="row">
+                <h5>Bike Type</h5>
+
+                <select id="BikeAttrSelector" onchange="onTypeChanged()">
+                  <option value="All">All</option>
+                  <option value="Pedelec">Pedelec</option>
+                  <option value="Bike">Bike</option>
+                </select>
+              </div>
+              <div class="row" id="sliderContainer">
+                <input
+                  id="timeslide"
+                  type="range"
+                  min="0"
+                  max="8"
+                  value="0"
+                  step="1"
+                /><br />
+                <span id="range">January</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <div class="column">
+          <section class="container">
+            <div
+              id="map"
+              style="height: 600px; width: 900px; border: 1px solid #777"
+            ></div>
+          </section>
+        </div>
+      </div>
+    </section>
+    <svg width="900" height="600" , style="border: 1px solid #777"></svg>
   </body>
   <script
     src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

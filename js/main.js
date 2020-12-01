@@ -1,6 +1,89 @@
-var s = "Pleasants Park-Oregon Hill";
-var e = "Brown's Island";
-var t = "Bike";
+var svg = d3.select("svg");
+
+var svgWidth = +svg.attr("width");
+var svgHeight = +svg.attr("height");
+var padding = { t: 60, r: 40, b: 30, l: 120 };
+
+var chartWidth = svgWidth - padding.l - padding.r;
+var chartHeight = svgHeight - padding.t - padding.b;
+
+var xscale = d3.scaleLinear().range([padding.l, chartWidth]);
+var yscale = d3
+  .scaleSymlog()
+  .rangeRound([chartHeight, chartHeight / 2 + padding.t]);
+var yscale2 = d3.scaleSymlog().rangeRound([chartHeight / 2, padding.t]);
+var rscale = d3.scaleSqrt().range([1, 5]);
+//X-axis
+xAxisG = svg
+  .append("g")
+  .attr("class", "xaxis")
+  .attr("transform", "translate(0," + (svgHeight - 50) + ")");
+
+yAxisG1 = svg
+  .append("g")
+  .attr("class", "yaxis1")
+  .attr("transform", "translate(100,0)");
+
+yAxisG2 = svg
+  .append("g")
+  .attr("class", "yaxis2")
+  .attr("transform", "translate(100,0)");
+
+var tooltip = d3
+  .tip()
+  .attr("class", "d3-tip")
+  .offset([-12, 0])
+  .html(function (d) {
+    //polyline = L.polyline(GPS_routes[d.routeId], { weight: 10 }).addTo(map2);
+    //console.log("Hello");
+    return (
+      "<h5>" +
+      d.routeId +
+      "</h5><table><thead><tr><td>Start</td><td>End</td><td>RFID</td><td>Membership</td></tr></thead>" +
+      "<tbody><tr><td>" +
+      d.start +
+      "</td><td>" +
+      d.end +
+      "</td><td>" +
+      d.rfidType +
+      "</td><td>" +
+      d.membership +
+      "</td></tr></tbody>" +
+      "<thead><tr><td>Distance</td><td colspan='2'>Duration</td><td>Cost</td><td>Type</td</tr></thead>" +
+      "<tbody><tr><td>" +
+      d.distance +
+      "</td><td colspan='2'>" +
+      d.duration +
+      "</td><td>" +
+      d.cost +
+      "</td><td>" +
+      d.type +
+      "</td></tr>/</tbody></table>"
+    );
+  });
+
+svg.call(tooltip);
+
+var legendColor = d3
+  .scaleOrdinal()
+  .domain(["Bike", "Pedelec"])
+  .range(d3.schemeSet2);
+
+function scaleBikeDuration(duration) {
+  return yscale(duration);
+}
+
+function scalePedelecDuration(duration) {
+  return yscale2(duration);
+}
+
+function scaleDistance(distance) {
+  return xscale(distance);
+}
+
+var s = "Abner Clay Park";
+var e = "Abner Clay Park";
+var t = "All";
 var month = 0;
 var v = 420;
 var heat;
@@ -28,6 +111,7 @@ function onStartChanged() {
   var select = d3.select("#StartAttrSelector").node();
   // Get current value of select element
   s = select.options[select.selectedIndex].value;
+  console.log(s);
   // Update chart with the selected category of letters
   drawHeatmap();
 }
@@ -71,6 +155,7 @@ mapMarkers = {
 
 //prettier-ignore
 var startLocMap = {
+  "All": 0,
   "Monroe Park": 1,
   "Canal Walk": 2,
   "Pleasants Park-Oregon Hill": 3,
@@ -94,6 +179,7 @@ var startLocMap = {
 };
 //prettier-ignore
 var endLocMap = {
+  "All": 0,
   "Broad & Harrison": 1,
   "Brown's Island": 2,
   "Monroe Park": 3,
@@ -124,23 +210,102 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 18,
 }).addTo(map);
 
-//var heat = L.heatLayer(quakePoints, {
-//  radius: 20,
-//  blur: 15,
-//  maxZoom: 17,
-//}).addTo(map);
-//console.log(quakePoints);
-
+//Datasets
 var heatmapData;
+var route_info;
 
-Promise.all([d3.json("./data/heatmap.json")]).then(function (data) {
+Promise.all([
+  d3.json("./data/heatmap.json"),
+  d3.csv("./data/route_reports.csv", function (row) {
+    if (+row["Duration (min)"] < 12000) {
+      var routes = {
+        routeId: row["Route ID"],
+        cost: +row["Cost"],
+        distance: +row["Distance"],
+        type: row["Type"],
+        duration: +row["Duration (min)"],
+        membership: row["Membership"],
+        rfidType: row["RFID"],
+        start: row["Start"],
+        end: row["End"],
+      };
+      return routes;
+    }
+  }),
+]).then(function (data) {
   heatmapData = data[0];
+
+  route_info = data[1];
+  //console.log(route_info);
+  //GPS_routes = data[2];
   //console.log("Hello!");
   //RouteDetails = data[1];
   //console.log(RouteDetails);
+  initBubblechart();
   drawHeatmap();
   drawMarkers();
 });
+
+function initBubblechart() {
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .transition()
+    .duration(2000)
+    .text("Distance (miles)")
+    .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 20] + ")")
+    .attr("font-size", "15px")
+    .attr("font-weight", "bold")
+    .style("fill", "black");
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .transition()
+    .duration(2000)
+    .text("Duration (min)")
+    .attr(
+      "transform",
+      "translate(" + [30, svgHeight / 4 + 70] + ") rotate(-90)"
+    )
+    .attr("font-size", "15px")
+    .attr("font-weight", "bold")
+    .style("fill", "black");
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .transition()
+    .duration(2000)
+    .text("Duration (min)")
+    .attr("font-size", "15px")
+    .attr("font-weight", "bold")
+    .attr(
+      "transform",
+      "translate(" + [30, (svgHeight * 3) / 4 + 20] + ") rotate(-90)"
+    )
+    .style("fill", "black");
+
+  svg
+    .selectAll("labels")
+    .data(["Bike", "Pedelec"])
+    .enter()
+    .append("text")
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .attr("x", 800)
+    .attr("y", function (d, i) {
+      return 30 + i * 25;
+    })
+    .style("fill", function (d) {
+      return legendColor(d);
+    })
+    .text(function (d) {
+      return d;
+    })
+    .attr("text-anchor", "left")
+    .style("alignment-baseline", "middle");
+}
 
 var normalIcon = L.icon({
   iconUrl: "./img/small-bike-512.png",
@@ -249,21 +414,80 @@ function norm(v) {
   return [v[0] / len, v[1] / len];
 }
 
+function addLocations(monthlyLocData, startLoc, endLoc, v) {
+  var locs = [];
+  var routeIDs = [];
+  console.log(monthlyLocData);
+  console.log(v);
+  if (startLoc === 0 && endLoc === 0) {
+    monthlyLocData.forEach((element) => {
+      locs = locs.concat(element["Locations"]);
+      routeIDs = routeIDs.concat(element["Route IDs"]);
+    });
+  } else if (endLoc === 0) {
+    monthlyLocData.forEach((element) => {
+      if (element["Start"] === s) {
+        routeIDs = routeIDs.concat(element["Route IDs"]);
+        locs = locs.concat(element["Locations"]);
+      }
+    });
+  } else if (startLoc === 0) {
+    monthlyLocData.forEach((element) => {
+      if (element["End"] === e) {
+        routeIDs = routeIDs.concat(element["Route IDs"]);
+        locs = locs.concat(element["Locations"]);
+      }
+    });
+  } else {
+    if (v === -1) {
+      routeIDs =
+        monthlyLocData[0 + 21 * (startLoc - 1) + endLoc - 1]["Route IDs"];
+      locs = monthlyLocData[0 + 21 * (startLoc - 1) + endLoc - 1]["Locations"];
+      routeIDs = routeIDs.concat(
+        monthlyLocData[420 + 21 * (startLoc - 1) + endLoc - 1]["Route IDs"]
+      );
+      locs = locs.concat(
+        monthlyLocData[420 + 21 * (startLoc - 1) + endLoc - 1]["Locations"]
+      );
+    } else {
+      routeIDs =
+        monthlyLocData[v + 21 * (startLoc - 1) + endLoc - 1]["Route IDs"];
+      locs = monthlyLocData[v + 21 * (startLoc - 1) + endLoc - 1]["Locations"];
+    }
+  }
+  return [routeIDs, locs];
+}
+
 function extractLocation(monthFilteredData) {
   startLoc = startLocMap[s];
   endLoc = endLocMap[e];
   if (t === "Bike") {
-    //console.log("KireBhai!");
+    //typefiltered = monthFilteredData["place_pairs"].slice(0, 420);
     v = 0;
-  } else {
+  } else if (t === "Pedelec") {
+    //typefiltered = monthFilteredData["place_pairs"].slice(421, 840);
     v = 420;
+  } else {
+    //All chosen
+    typefiltered = monthFilteredData["place_pairs"];
+    v = -1;
   }
 
-  console.log("extract location");
-  var old =
-    monthFilteredData["place_pairs"][v + 21 * (startLoc - 1) + endLoc - 1][
-      "Locations"
-    ];
+  //console.log("extract location");
+
+  location_info = addLocations(
+    monthFilteredData["place_pairs"],
+    startLoc,
+    endLoc,
+    v
+  );
+
+  //Route IDs
+  routeids = location_info[0];
+  console.log(routeids);
+
+  //Location data
+  var old = location_info[1];
 
   if (old.length < 1) return [];
 
@@ -292,16 +516,19 @@ function extractLocation(monthFilteredData) {
     // end of loop
   }
   console.log("GPS array size " + resample.length);
-  return resample;
+  return [resample, routeids];
 }
 
 function drawHeatmap() {
-  console.log(heatmapData["dict"][month]);
+  //console.log(heatmapData["dict"][month]);
 
-  locations = extractLocation(heatmapData["dict"][month]);
+  extractedvals = extractLocation(heatmapData["dict"][month]);
+  locations = extractedvals[0];
+  routeids = extractedvals[1];
+  if (typeof locations === "undefined") locations = [];
+  if (routeids !== undefined) updateChart(routeids);
 
   drawMarkers();
-
   if (heat != null) {
     //console.log("Eikhane");
     heat.setLatLngs(locations);
@@ -312,4 +539,97 @@ function drawHeatmap() {
       maxZoom: 18,
     }).addTo(map);
   }
+}
+
+function extractRouteInfo(route_ids) {
+  if (route_ids == null) return null;
+  return route_info.filter((r) => route_ids.includes(r.routeId));
+}
+
+function updateChart(routeids) {
+  // Adding x-axis
+  data = extractRouteInfo(routeids);
+  console.log(data);
+
+  distanceExtent = d3.extent(data, function (d) {
+    return +d.distance;
+  });
+  xscale.domain(distanceExtent);
+
+  svg
+    .selectAll("g.xaxis")
+    .style("opacity", "1")
+    .transition()
+    .duration(2000)
+    .call(d3.axisBottom(xscale));
+
+  DurationExtent = d3.extent(data, function (d) {
+    return +d.duration;
+  });
+  yscale.domain(DurationExtent);
+  svg
+    .selectAll("g.yaxis1")
+    .style("opacity", "1")
+    .transition()
+    .duration(2000)
+    .call(d3.axisLeft(yscale).ticks(7));
+
+  yscale2.domain(DurationExtent);
+  svg
+    .selectAll("g.yaxis2")
+    .style("opacity", "1")
+    .transition()
+    .duration(2000)
+    .call(d3.axisLeft(yscale2));
+
+  var dots = svg.selectAll("circle").data(data);
+
+  var dotsEnter = dots
+    .enter()
+    .append("circle")
+    .classed("circle", "true")
+    .on("mouseover", function (d) {
+      //console.log(legendColor(d.type));
+      tooltip.show(d);
+    })
+    .on("mouseout", function (d) {
+      d3.select(this).call(tooltip.hide);
+      //if (polyline) map2.removeLayer(polyline);
+    });
+
+  dots
+    .merge(dotsEnter)
+    .attr("transform", function (route) {
+      //console.log(this);
+      if (route.type === "Bike") {
+        return (
+          "translate(" +
+          scaleDistance(route.distance) +
+          "," +
+          scaleBikeDuration(route.duration) +
+          ")"
+        );
+      } else {
+        return (
+          "translate(" +
+          scaleDistance(route.distance) +
+          "," +
+          scalePedelecDuration(route.duration) +
+          ")"
+        );
+      }
+    })
+    .attr("r", function (d) {
+      //console.log("Cost" + d.cost);
+      //console.log("Calculated val:" + rscale(+d.cost));
+      return rscale(+d.cost);
+    })
+    .style("fill", function (d) {
+      //console.log(d.type);
+      //console.log("color:" + legendColor(d.type));
+      return legendColor(d.type);
+      //if (d.type === "Bike") return "#d64d3f";
+      //else return "#96ac3d";
+    });
+  dots.exit().remove();
 }
