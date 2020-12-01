@@ -266,6 +266,7 @@ function drawChart(route_info, GPS_routes) {
     //console.log("Hl");
     //Removing previous mappings
     polylines.removeFrom(map2);
+    polylines.clearLayers();
     circleEnter.classed("selected", function (d) {
       if (
         isBrushed(
