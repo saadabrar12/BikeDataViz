@@ -394,9 +394,11 @@ function drawbarchart(month){
     bars
         .enter().append("rect")
         .merge(bars)
-        .transition().duration(2000)
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(2000)
         .attr("y", function(d) { return bar_y(d.data.Start)})	    //.attr("x", function(d) { return x(d.data.State); })
-        .attr("height", bar_y.bandwidth())    
+        .attr("height", (4*bar_y.bandwidth())/5)    
         .attr("x", function(d) { return bar_x(d[0]); })			    //.attr("y", function(d) { return y(d[1]); })	
         .attr("width", function(d) { return bar_x(d[1]) - bar_x(d[0]); })	//.attr("height", function(d) { return y(d[0]) - y(d[1]); })
         ;		
