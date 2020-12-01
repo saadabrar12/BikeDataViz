@@ -18,7 +18,7 @@ var bar_svg;
 Promise.all([d3.json("aggchartdata.json")]).then(function (data) {
     aggchartData = data[0];
     console.log("Hello!");
-    console.log(aggchartData['4']);
+    //console.log(aggchartData['4']);
     
 
 
@@ -281,8 +281,7 @@ function drawbarchart(month){
     console.log(bar_data);
 
     bar_data.forEach(function(d) {
-        //console.log(d.values[0].incoming)
-        //d.incoming=Math.abs(d.incoming);
+       
         d.total = Math.abs(d.incoming)+d.outgoing;
         
         d.incoming=-Math.abs(d.incoming);
@@ -301,36 +300,14 @@ function drawbarchart(month){
     console.log(subgroups);
     
     console.log(groups);
-    
-
-
-
-    //svg.select('.y').transition().duration(500).delay(1300).style('opacity','1');
-
-    
-    //x0.domain(monthnames);
-    //x1.domain(typenames).rangeRound([0, x0.bandwidth()]);
+   
     bar_y.domain(groups);
 
     bar_color = d3.scaleOrdinal(d3.schemeCategory10)
                 .range(["green", "red"])
                 .domain(subgroups);
 
-    
-    //var hournames=linechartData[0].values[0].values.map(function(d) { return d.hour; });
-    
-        //.call(d3.axisBottom(bar_xAxis).tickSizeOuter(0));
-                            
-    
-    
-    //svg.selectAll(".yaxis").transition().duration(2000)
-	//		.call(bar_yAxis.tickSizeOuter(0))
-        //.tickValues(groups);
-
-    //svg.selectAll(".yaxis").transition().duration(10)
-    //    .call(d3.axisLeft(y).tickSizeOuter(0))
-    
-    
+                
     bar_svg.selectAll("g.yaxis")
         .style('opacity','1')
          .transition()
@@ -347,40 +324,26 @@ function drawbarchart(month){
          .duration(2000)
          .call(bar_xAxis);
     
-    //bar_xAxis = d3.axisBottom().scale(d3.scaleLinear().domain([0,d3.max(data, d => d.total)]).rangeRound([0, width]));
-                            //.tickFormat(d3.timeFormat("Month %V"))
-                            //.tickValues([0,d3.max()]);
-    
-    //bar_svg.selectAll(".yaxis")
-    //.remove()
-    //.transition().duration(2000)
-    //    .call(bar_xAxis.ticks(null, "s"))
-
-        //.call(bar_xAxis);
-    
+         
     var stackedData = d3.stack()
         .keys(subgroups.reverse())
         .offset(d3.stackOffsetDiverging)
         (bar_data)
     
-    //bar_svg.selectAll("g").exit().remove()
     console.log(stackedData);
 
-    //var bar_groups_g=bar_svg.append("g").attr("class","dash")
-                    
-    //console.log(bar_groups_g.selectAll("dash"))
-    //bar_groups_g.selectAll("dash").exit().remove();
+    
     var bar_groups=bar_svg
-    .selectAll(".dash")
-    .data(stackedData);
+        .selectAll(".dash")
+        .data(stackedData);
 
     bar_groups.exit().remove();
 
     bar_groups.enter()
-    .append("g")
-    .classed("dash",true)
-    .attr("fill", function(d) { console.log(d.key); return bar_color(d.key); })
-    ;
+        .append("g")
+        .classed("dash",true)
+        .attr("fill", function(d) { console.log(d.key); return bar_color(d.key); })
+        ;
 
     
     var bars = bar_svg
@@ -388,12 +351,11 @@ function drawbarchart(month){
         //.enter().append("g")
         .selectAll("rect")
         .data(function(d) { return d; })
-    //bars.selectAll("g.rect").exit().remove();
-    //bars.selectAll("g.foo").exit().remove();
-    //bars.selectAll("g").exit().remove();
+    
     bars
         .enter().append("rect")
         .merge(bars)
+        .attr("width",  bar_x(0))	//.attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .transition()
         .ease(d3.easeLinear)
         .duration(2000)
@@ -405,8 +367,6 @@ function drawbarchart(month){
     
     bars.exit().remove();
     
-    //.attr("width", x.bandwidth());	
-      //console.log(this);
     //Legend
     var legend = bar_svg.selectAll(".legend")
         .data(subgroups.reverse())

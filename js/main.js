@@ -1,11 +1,10 @@
-var s = "Abner Clay Park";
-var e = "Abner Clay Park";
-var t = "Pedelec";
-var m = 0;
+var s = "Pleasants Park-Oregon Hill";
+var e = "Brown's Island";
+var t = "Bike";
+var month = 0;
 var v = 420;
 var heat;
-var markers = [];
-var popups = [];
+var stationChanged = true;
 
 var YearMonths = [
   "April",
@@ -19,17 +18,8 @@ var YearMonths = [
   "December",
 ];
 
-var myIcon = L.icon({
-  iconUrl: "small-bike-512.png",
-  iconSize: [35, 35],
-  iconAnchor: [12, 35],
-  popupAnchor: [0, -30],
-  shadowSize: [68, 95],
-  shadowAnchor: [22, 94],
-});
-
 d3.select("#timeslide").on("input", function () {
-  m = +this.value;
+  month = +this.value;
   document.getElementById("range").innerHTML = YearMonths[+this.value];
   drawHeatmap();
 });
@@ -127,9 +117,9 @@ var endLocMap = {
   "Main Library": 21,
 };
 
-var map = L.map("map").setView([37.56032167, -77.46614], 14);
-mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+var map = L.map("map").setView([37.56032167, -77.46614], 13);
+mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "&copy; " + mapLink + " Contributors",
   maxZoom: 18,
 }).addTo(map);
@@ -143,7 +133,7 @@ L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 var heatmapData;
 
-Promise.all([d3.json("heatmap.json")]).then(function (data) {
+Promise.all([d3.json("./data/heatmap.json")]).then(function (data) {
   heatmapData = data[0];
   //console.log("Hello!");
   //RouteDetails = data[1];
@@ -152,6 +142,73 @@ Promise.all([d3.json("heatmap.json")]).then(function (data) {
   drawMarkers();
 });
 
+var normalIcon = L.icon({
+  iconUrl: "./img/small-bike-512.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, 0],
+});
+var startIcon = L.icon({
+  iconUrl: "./img/start.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, 0],
+});
+var endIcon = L.icon({
+  iconUrl: "./img/end.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, 0],
+});
+var bothIcon = L.icon({
+  iconUrl: "./img/both.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, 0],
+});
+
+var currentMarker = "";
+var allMarkers = [];
+function updateIcon() {
+  allMarkers.forEach(function (item, idx) {
+    var name = item.id;
+    var target = item.m;
+    //console.log('updating icon');
+    //console.log(item);
+    if (s == name && e == name) {
+      target.setIcon(bothIcon);
+    } else if (s == name) {
+      target.setIcon(startIcon);
+    } else if (e == name) {
+      target.setIcon(endIcon);
+    } else {
+      target.setIcon(normalIcon);
+    }
+  });
+}
+
+function userSetStart() {
+  if (s != currentMarker) {
+    s = currentMarker;
+    stationChanged = true;
+    updateIcon();
+    drawHeatmap();
+  } else {
+    console.log("set start: no change");
+  }
+}
+
+function userSetEnd() {
+  if (e != currentMarker) {
+    e = currentMarker;
+    stationChanged = true;
+    updateIcon();
+    drawHeatmap();
+  } else {
+    console.log("set end: no change");
+  }
+}
+
 function drawMarkers() {
   //var markerSource = L.marker(mapMarkers[s]).addTo(map);
   //var srcPopup = markerSource.bindPopup(s);
@@ -159,43 +216,89 @@ function drawMarkers() {
   //var markerDestination = L.marker(mapMarkers[e]);
   //var destPopup = markerDestination.bindPopup(e);
   //destPopup.openPopup();
+  var popcontent =
+    "<p id='id0'> content0 </p>\
+  <button type='button' class='btn btn-primary btn-sm' onclick='userSetStart()'>Set as start</button>\
+  <button type='button' class='btn btn-primary btn-sm' onclick='userSetEnd()'>Set as end</button>\
+  ";
+
+  var stationID = 0;
+
   for (let [k, v] of Object.entries(mapMarkers)) {
-    var marker = L.marker(v, { icon: myIcon }).addTo(map);
-    var popup = marker.bindPopup(k);
-    //console.log(popup);
-    markers.push(marker);
-    popups.push(popup);
+    var marker = L.marker(v, { icon: normalIcon }).addTo(map);
+    allMarkers.push({ m: marker, id: k });
+    //var popup = marker.bindPopup(k);
+    var p = popcontent.replace("id0", stationID).replace("content0", k);
+    var popup = L.popup().setContent(p);
+    marker.bindPopup(popup);
+    marker.on("click", function (e) {
+      currentMarker = k;
+      console.log(currentMarker);
+    });
     //popup.openPopup();
   }
-  //for (var i = 0; i < markers.length; i++) {
-  //  console.log(popups[i]);
-  //markers[i].bindPopup("Popup content");
-  //  markers[i].on("mouseover", function (e) {
-  //    popups[i].openPopup();
-  //  });
-  //  markers[i].on("mouseout", function (e) {
-  //    popups[i].closePopup();
-  //  });
-  //}
+  updateIcon();
+}
+
+function dist(a, b) {
+  var s = (a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]);
+  return Math.sqrt(s);
+}
+function norm(v) {
+  var len = dist(v, [0, 0]);
+  return [v[0] / len, v[1] / len];
 }
 
 function extractLocation(monthFilteredData) {
   startLoc = startLocMap[s];
   endLoc = endLocMap[e];
   if (t === "Bike") {
+    //console.log("KireBhai!");
     v = 0;
   } else {
     v = 420;
   }
-  return monthFilteredData["place_pairs"][v + 21 * (startLoc - 1) + endLoc - 1][
-    "Locations"
-  ];
+
+  console.log("extract location");
+  var old =
+    monthFilteredData["place_pairs"][v + 21 * (startLoc - 1) + endLoc - 1][
+      "Locations"
+    ];
+
+  if (old.length < 1) return [];
+
+  var resample = [];
+  var i = 0,
+    j = 0;
+  var step = 10.1e-6; // minD = 1e-8;
+  var last = [old[j][0], old[j][1]];
+
+  //console.log(old.length);
+  for (i = 0; i < old.length; ++i) {
+    //console.log(old[i]);
+    var x = old[i][0];
+    var y = old[i][1];
+    var d = dist(last, [x, y]);
+    if (d > step) {
+      var d1 = dist([x, y], last);
+      var dir = norm([x - last[0], y - last[1]]);
+      while (d1 > 0) {
+        resample.push([last[0], last[1], old[i][3]]);
+        last[0] += dir[0] * step;
+        last[1] += dir[1] * step;
+        d1 -= step;
+      }
+    }
+    // end of loop
+  }
+  console.log("GPS array size " + resample.length);
+  return resample;
 }
 
 function drawHeatmap() {
-  //console.log(heatmapData["dict"][m]);
+  console.log(heatmapData["dict"][month]);
 
-  locations = extractLocation(heatmapData["dict"][m]);
+  locations = extractLocation(heatmapData["dict"][month]);
 
   drawMarkers();
 
@@ -204,9 +307,9 @@ function drawHeatmap() {
     heat.setLatLngs(locations);
   } else {
     heat = L.heatLayer(locations, {
-      radius: 6,
-      blur: 5,
-      maxZoom: 19,
+      radius: 3,
+      blur: 5.5,
+      maxZoom: 18,
     }).addTo(map);
   }
 }
