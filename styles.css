@@ -106,3 +106,8 @@ select {
 .bg-light {
   background-color: #f8f9fa !important;
 }
+
+.axis-label {
+  color: black;
+  background-color: #fa8f8;
+}
