@@ -4,6 +4,7 @@ var svgWidth = +svg.attr("width");
 var svgHeight = +svg.attr("height");
 var polyline;
 var GPS_routes;
+polylines = L.layerGroup();
 
 var padding = { t: 60, r: 40, b: 30, l: 120 };
 
@@ -105,6 +106,16 @@ function scaleDistance(distance) {
 }
 
 function drawChart(route_info, GPS_routes) {
+  svg.call(
+    d3
+      .brush()
+      .extent([
+        [padding.l, padding.t],
+        [chartWidth, chartHeight],
+      ])
+      .on("start brush", updateChart)
+      .on("end", brushend)
+  );
   // Adding x-axis
   distanceExtent = d3.extent(route_info, function (d) {
     return +d.distance;
@@ -177,7 +188,10 @@ function drawChart(route_info, GPS_routes) {
     .append("text")
     .attr("class", "axis-label")
     .text("Duration (min)")
-    .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 30] + ")");
+    .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 30] + ")")
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .style("fill", "black");
 
   svg
     .append("text")
@@ -186,16 +200,22 @@ function drawChart(route_info, GPS_routes) {
     .attr(
       "transform",
       "translate(" + [30, svgHeight / 4 + 70] + ") rotate(-90)"
-    );
+    )
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
+    .style("fill", "black");
 
   svg
     .append("text")
     .attr("class", "axis-label")
     .text("Distance Travelled (miles)")
+    .attr("font-size", "20px")
+    .attr("font-weight", "bold")
     .attr(
       "transform",
       "translate(" + [30, (svgHeight * 3) / 4 + 50] + ") rotate(-90)"
-    );
+    )
+    .style("fill", "black");
 
   var circleEnter = routeEnter
     .append("circle")
@@ -207,16 +227,6 @@ function drawChart(route_info, GPS_routes) {
       //if (d.type === "Bike") return "#d64d3f";
       //else return "#96ac3d";
     });
-  /*
-  svg.call(
-    d3
-      .brush()
-      .extent([
-        [, 0],
-        [svgWidth, svgHeight],
-      ])
-      .on("start brush", updateChart)
-  );*/
 
   circleEnter
     .on("mouseover", function (d) {
@@ -241,7 +251,7 @@ function drawChart(route_info, GPS_routes) {
     .attr("x", 1300)
     .attr("y", function (d, i) {
       return 30 + i * 25;
-    }) // 100 is where the first dot appears. 25 is the distance between dots
+    })
     .style("fill", function (d) {
       return legendColor(d);
     })
@@ -250,17 +260,29 @@ function drawChart(route_info, GPS_routes) {
     })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
-  /*
+
   function updateChart() {
     extent = d3.event.selection;
-    console.log("Hl");
+    //console.log("Hl");
+    //Removing previous mappings
+    polylines.removeFrom(map2);
     circleEnter.classed("selected", function (d) {
-      return isBrushed(
-        extent,
-        xscale(d.duration),
-        yscale(d.distance),
-        yscale2(d.distance)
-      );
+      if (
+        isBrushed(
+          extent,
+          scaleDistance(d.distance),
+          scaleBikeDuration(d.duration),
+          scalePedelecDuration(d.duration)
+        )
+      ) {
+        if (GPS_routes[d.routeId]) {
+          polylines.addLayer(L.polyline(GPS_routes[d.routeId], { weight: 8 }));
+          polylines.addTo(map2);
+        }
+        return true;
+      } else {
+        return false;
+      }
     });
   }
 
@@ -270,11 +292,18 @@ function drawChart(route_info, GPS_routes) {
       x1 = brush_coords[1][0],
       y0 = brush_coords[0][1],
       y1 = brush_coords[1][1];
+    //console.log(cx);
+    //console.log(cy2);
     return (
       x0 <= cx &&
       cx <= x1 &&
       ((y0 <= cy && cy <= y1) || (y0 <= cy2 && cy2 <= y1))
     ); // This return TRUE or FALSE depending on if the points is in the selected area
   }
-  */
+  function brushend() {
+    if (!d3.event.selection) {
+      //console.log("Hey");
+      polylines.removeFrom(map2);
+    }
+  }
 }
