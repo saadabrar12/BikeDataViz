@@ -143,6 +143,24 @@ function drawChart(route_info, GPS_routes) {
   xscale.clamp(true);
   yscale.clamp(true);
 
+  var xGrid = d3.axisTop(xscale)
+  .tickSize(-chartHeight, padding.l+padding.l, padding.l)
+  .tickFormat('');
+
+trellisG.append('g')
+  .attr('class', 'grid')
+  .call(xGrid);
+
+var yGrid = d3.axisLeft(yscale)
+  .tickSize(-chartWidth, padding.l, padding.l)
+  .tickFormat('')
+
+trellisG.append('g')
+  .attr('class', 'grid')
+  .call(yGrid);
+
+
+
   svg
     .append("text")
     .attr("class", "axis-label")
@@ -238,6 +256,9 @@ function drawChart(route_info, GPS_routes) {
       //console.log(d.type);
       return legendColor(d.type);
     });
+
+    
+
   trellisG
     .selectAll("circle")
     .transition()
@@ -257,6 +278,8 @@ function drawChart(route_info, GPS_routes) {
     .style("stroke", "red")
     .attr("stroke-width", 1)
     .attr("opacity", 0.7);
+
+
 
   circles
     .on("mouseover", function (d) {
