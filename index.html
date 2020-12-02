@@ -126,76 +126,82 @@
             </p>
           </div>
         </div>
-      </div>
+        <div class="row tm-section-pad-top">
+          <section>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="tm-intro-text-container">
+                  <h2 class="tm-text-primary mb-4 tm-section-title">
+                    Richmond Bike Map
+                  </h2>
+                  <p class="mb-4 tm-intro-text">
+                    The map markers indicate the bike stations in the city of
+                    Richmond.
+                  </p>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div id="bikemap" style="width: 650px; height: 600px"></div>
+                <script>
+                  var mapMarkers = {
+                    "Monroe Park": [37.5466, -77.4505],
+                    "Canal Walk": [37.533294, -77.432861],
+                    "Pleasants Park-Oregon Hill": [37.5402883, -77.45134145],
+                    "Broad & Lombardy": [37.55365954, -77.455663],
+                    "Abner Clay Park": [37.5487795, -77.44260818],
+                    "Jefferson Ave": [37.53477623, -77.41931267],
+                    "Biotech Park": [37.545892, -77.434531],
+                    "Broad & Harrison": [37.5460623, -77.4424587],
+                    "City Hall": [37.54098825, -77.43296116],
+                    "Brown's Island": [37.53541383, -77.44306472],
+                    "Center Stage": [37.54132293, -77.43719779],
+                    "Sydney Park": [37.54698042, -77.45654494],
+                    "Petronius Jones Park-Randolph": [
+                      37.54484103,
+                      -77.46495903,
+                    ],
+                    "Kanawha Plaza": [37.53711659, -77.43928492],
+                    "Science Museum": [37.56028749, -77.46618211],
+                    "Scott's Addition": [37.56822212, -77.47182548],
+                    "Broad & Hermitage": [37.55367891, -77.45568931],
+                    "Main Library": [37.54276275, -77.44239662],
+                    Warehouse: [37.5109, -77.4574],
+                    "Downtown YMCA": [37.54436, -77.44367],
+                  };
+                  var bikemap = L.map("bikemap").setView(
+                    [37.526371, -77.431452],
+                    13
+                  );
+                  mapLink =
+                    '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+                  L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    {
+                      attribution: "&copy; " + mapLink + " Contributors",
+                      maxZoom: 18,
+                    }
+                  ).addTo(bikemap);
+                  allMarkers = [];
+                  for (let [k, v] of Object.entries(mapMarkers)) {
+                    var marker = L.marker(v).addTo(bikemap);
+                    allMarkers.push({ m: marker, id: k });
+                    //var popup = marker.bindPopup(k);
 
-      <div class="row tm-section-pad-top">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="tm-intro-text-container">
-              <h2 class="tm-text-primary mb-4 tm-section-title">
-                Richmond Bike Map
-              </h2>
-              <p class="mb-4 tm-intro-text">
-                The map markers indicate the bike stations in the city of
-                Richmond.
-              </p>
+                    var popup = L.popup().setContent(k);
+                    marker.bindPopup(popup);
+
+                    marker.on("mouseover", function (e) {
+                      this.openPopup();
+                      //console.log(currentMarker);
+                    });
+                    marker.on("mouseout", function (e) {
+                      this.closePopup();
+                    });
+                  }
+                </script>
+              </div>
             </div>
-          </div>
-          <div class="col-lg-6" id="bikemap" style="width: 1000; height: 200">
-            <script>
-              var mapMarkers = {
-                "Monroe Park": [37.5466, -77.4505],
-                "Canal Walk": [37.533294, -77.432861],
-                "Pleasants Park-Oregon Hill": [37.5402883, -77.45134145],
-                "Broad & Lombardy": [37.55365954, -77.455663],
-                "Abner Clay Park": [37.5487795, -77.44260818],
-                "Jefferson Ave": [37.53477623, -77.41931267],
-                "Biotech Park": [37.545892, -77.434531],
-                "Broad & Harrison": [37.5460623, -77.4424587],
-                "City Hall": [37.54098825, -77.43296116],
-                "Brown's Island": [37.53541383, -77.44306472],
-                "Center Stage": [37.54132293, -77.43719779],
-                "Sydney Park": [37.54698042, -77.45654494],
-                "Petronius Jones Park-Randolph": [37.54484103, -77.46495903],
-                "Kanawha Plaza": [37.53711659, -77.43928492],
-                "Science Museum": [37.56028749, -77.46618211],
-                "Scott's Addition": [37.56822212, -77.47182548],
-                "Broad & Hermitage": [37.55367891, -77.45568931],
-                "Main Library": [37.54276275, -77.44239662],
-                Warehouse: [37.5109, -77.4574],
-                "Downtown YMCA": [37.54436, -77.44367],
-              };
-              var bikemap = L.map("bikemap").setView(
-                [37.56032167, -77.46614],
-                13
-              );
-              mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-              L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {
-                  attribution: "&copy; " + mapLink + " Contributors",
-                  maxZoom: 18,
-                }
-              ).addTo(bikemap);
-              allMarkers = [];
-              for (let [k, v] of Object.entries(mapMarkers)) {
-                var marker = L.marker(v).addTo(bikemap);
-                allMarkers.push({ m: marker, id: k });
-                //var popup = marker.bindPopup(k);
-
-                var popup = L.popup().setContent(k);
-                marker.bindPopup(popup);
-
-                marker.on("mouseover", function (e) {
-                  this.openPopup();
-                  console.log(currentMarker);
-                });
-                marker.on("mouseout", function (e) {
-                  this.closePopup();
-                });
-              }
-            </script>
-          </div>
+          </section>
         </div>
       </div>
     </section>
@@ -253,12 +259,7 @@
         </div>
       </div>
       <footer class="text-center small tm-footer">
-        <p class="mb-0">
-          Copyright &copy; 2019 University of Maryland - Design:
-          <a rel="nofollow" href="https://templatemo.com" class="tm-footer-link"
-            >Template Mo</a
-          >
-        </p>
+        <p class="mb-0">Copyright &copy; 2019 University of Maryland</p>
       </footer>
     </section>
     <script src="js/jquery-1.9.1.min.js"></script>

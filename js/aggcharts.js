@@ -191,6 +191,22 @@ Promise.all([d3.json("./data/aggchartdata.json")]).then(function (data) {
       return 1300 + 100 * i;
     })
     .style("opacity", "1");
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Ride Counts")
+    .attr("transform", "translate(" + [-40, 200] + ") rotate(-90)")
+    .attr("font-size", "15px")
+    .style("fill", "black");
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Months")
+    .attr("transform", "translate(" + [320, 350] + ") ")
+    .attr("font-size", "15px")
+    .style("fill", "black");
 });
 
 Promise.all([d3.json("./data/barchartdata.json")]).then(function (data) {
@@ -258,6 +274,22 @@ function drawlinechart(month) {
     .transition()
     .duration(2000)
     .call(yAxis);
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Ride Counts")
+    .attr("transform", "translate(" + [-40, 200] + ") rotate(-90)")
+    .attr("font-size", "15px")
+    .style("fill", "black");
+
+  svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Hour of the day")
+    .attr("transform", "translate(" + [300, 350] + ") ")
+    .attr("font-size", "15px")
+    .style("fill", "black");
 
   var groups = svg.selectAll("foo").data(selected_month.values);
   //    .enter()
@@ -397,6 +429,14 @@ function drawbarchart(month) {
     .duration(2000)
     .call(bar_xAxis);
 
+  bar_svg
+    .append("text")
+    .attr("class", "axis-label")
+    .text("Ride Counts")
+    .attr("transform", "translate(" + [300, 350] + ")")
+    .attr("font-size", "15px")
+    .style("fill", "black");
+
   //bar_xAxis = d3.axisBottom().scale(d3.scaleLinear().domain([0,d3.max(data, d => d.total)]).rangeRound([0, width]));
   //.tickFormat(d3.timeFormat("Month %V"))
   //.tickValues([0,d3.max()]);
@@ -505,5 +545,4 @@ function drawbarchart(month) {
       return 2000;
     })
     .style("opacity", "1");
-    
 }
