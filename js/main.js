@@ -119,11 +119,13 @@ var endLocMap = {
 
 var map = L.map("map").setView([37.56032167, -77.46614], 13);
 mapLink = '<a href="https://openstreetmap.org">OpenStreetMap</a>';
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "&copy; " + mapLink + " Contributors",
-  maxZoom: 18,
-}).addTo(map);
-
+L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	subdomains: 'abcd',
+	minZoom: 1,
+	maxZoom: 16,
+	ext: 'jpg'
+});
 //var heat = L.heatLayer(quakePoints, {
 //  radius: 20,
 //  blur: 15,

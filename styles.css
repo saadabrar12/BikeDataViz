@@ -1,8 +1,8 @@
 circle {
   fill: #4672c1;
   stroke: #fff;
-  stroke-width: 0.5;
-  opacity: 0.2;
+  /*stroke-width: 0.5;*/
+  opacity: 0.3;
 }
 circle:hover {
   stroke: black;
