@@ -119,8 +119,8 @@ aside {
   background-color: lightgray;
 }
 
-row {
-  box-sizing: border-box;
+#left {
+  float: left;
 }
 body {
   color: black;

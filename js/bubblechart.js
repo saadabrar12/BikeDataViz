@@ -146,29 +146,29 @@ function drawChart(route_info, GPS_routes) {
   svg
     .append("text")
     .attr("class", "axis-label")
-    .text("Duration (minutes)")
-    .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 30] + ")")
-    .attr("font-size", "20px")
+    .text("Distance Travelled (min)")
+    .attr("transform", "translate(" + [chartWidth / 2, svgHeight - 5] + ")")
+    .attr("font-size", "10px")
     .attr("font-weight", "bold")
     .style("fill", "black");
 
   svg
     .append("text")
     .attr("class", "axis-label")
-    .text("Duration (minutes")
+    .text("Duration (minutes)")
     .attr(
       "transform",
       "translate(" + [30, svgHeight / 4 + 70] + ") rotate(-90)"
     )
-    .attr("font-size", "20px")
+    .attr("font-size", "10px")
     .attr("font-weight", "bold")
     .style("fill", "black");
 
   svg
     .append("text")
     .attr("class", "axis-label")
-    .text("Distance Travelled (miles)")
-    .attr("font-size", "20px")
+    .text("Duration (minutes)")
+    .attr("font-size", "10px")
     .attr("font-weight", "bold")
     .attr(
       "transform",
@@ -240,9 +240,6 @@ function drawChart(route_info, GPS_routes) {
     });
   trellisG
     .selectAll("circle")
-    /*.filter(function (d) {
-      return GPS_routes[d.routeId];
-    })*/
     .transition()
     .delay(function (d, i) {
       return i * 0.5;
@@ -293,7 +290,7 @@ function drawChart(route_info, GPS_routes) {
     .append("text")
     .attr("font-size", "20px")
     .attr("font-weight", "bold")
-    .attr("x", 1300)
+    .attr("x", 400)
     .attr("y", function (d, i) {
       return 30 + i * 25;
     })
@@ -331,9 +328,9 @@ function drawChart(route_info, GPS_routes) {
             color: legendColor(d.type),
           });
           map2.flyToBounds(polyline.getBounds());
-          polyline.addTo(map2);
-          //polylines.addLayer(L.polyline(GPS_routes[d.routeId], { weight: 8 }));
-          //polylines.addTo(map2);
+          //polyline.addTo(map2);
+          polylines.addLayer(polyline);
+          polylines.addTo(map2);
         }
         return true;
       } else {
