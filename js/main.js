@@ -7,7 +7,7 @@ var padding = { t: 60, r: 40, b: 30, l: 120 };
 var chartWidth = svgWidth - padding.l - padding.r;
 var chartHeight = svgHeight - padding.t - padding.b;
 
-var xscale = d3.scaleLinear().range([padding.l, chartWidth]);
+var xscale = d3.scaleSymlog().rangeRound([padding.l, chartWidth]);
 var yscale = d3
   .scaleSymlog()
   .rangeRound([chartHeight, chartHeight / 2 + padding.t]);
@@ -106,8 +106,8 @@ function scaleDistance(distance) {
   return xscale(distance);
 }
 
-var s = "All";
-var e = "All";
+var s = "Abner Clay Park";
+var e = "Abner Clay Park";
 var t = "All";
 var month = 0;
 var v = 420;
@@ -247,11 +247,6 @@ Promise.all([
   heatmapData = data[0];
 
   route_info = data[1];
-  //console.log(route_info);
-  //GPS_routes = data[2];
-  //console.log("Hello!");
-  //RouteDetails = data[1];
-  //console.log(RouteDetails);
   initBubblechart();
   drawHeatmap();
   drawMarkers();
@@ -304,7 +299,7 @@ function initBubblechart() {
     .append("text")
     .attr("font-size", "20px")
     .attr("font-weight", "bold")
-    .attr("x", 800)
+    .attr("x", 500)
     .attr("y", function (d, i) {
       return 30 + i * 25;
     })
@@ -410,6 +405,13 @@ function drawMarkers() {
     marker.on("click", function (e) {
       currentMarker = k;
       console.log(currentMarker);
+    });
+    marker.on("mouseover", function (e) {
+      //console.log(k);
+      this.openPopup();
+    });
+    marker.on("mouseout", function (e) {
+      this.closePopup();
     });
     //popup.openPopup();
   }
@@ -589,6 +591,10 @@ function updateChart(routeids) {
     .transition()
     .duration(2000)
     .call(d3.axisLeft(yscale2).ticks(7));
+
+  xscale.clamp(true);
+  yscale.clamp(true);
+  yscale2.clamp(true);
 
   CostExtent = d3.extent(data, function (d) {
     return +d.cost;

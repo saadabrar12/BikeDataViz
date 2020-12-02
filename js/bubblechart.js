@@ -13,7 +13,7 @@ var chartHeight = svgHeight / 2 - padding.t - padding.b;
 
 var xscale = d3.scaleLog().base(2).rangeRound([padding.l, chartWidth]);
 var yscale = d3.scaleLog().base(2).rangeRound([chartHeight, padding.t]);
-var rscale = d3.scaleSqrt().range([0, 12]);
+var rscale = d3.scaleSqrt().range([2, 12]);
 
 var map2 = L.map("routemap").setView([37.56032167, -77.46614], 13);
 mapLink2 = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
@@ -143,23 +143,19 @@ function drawChart(route_info, GPS_routes) {
   xscale.clamp(true);
   yscale.clamp(true);
 
-  var xGrid = d3.axisTop(xscale)
-  .tickSize(-chartHeight, padding.l+padding.l, padding.l)
-  .tickFormat('');
+  var xGrid = d3
+    .axisTop(xscale)
+    .tickSize(-chartHeight, padding.l + padding.l, padding.l)
+    .tickFormat("");
 
-trellisG.append('g')
-  .attr('class', 'grid')
-  .call(xGrid);
+  trellisG.append("g").attr("class", "grid").call(xGrid);
 
-var yGrid = d3.axisLeft(yscale)
-  .tickSize(-chartWidth, padding.l, padding.l)
-  .tickFormat('')
+  var yGrid = d3
+    .axisLeft(yscale)
+    .tickSize(-chartWidth, padding.l, padding.l)
+    .tickFormat("");
 
-trellisG.append('g')
-  .attr('class', 'grid')
-  .call(yGrid);
-
-
+  trellisG.append("g").attr("class", "grid").call(yGrid);
 
   svg
     .append("text")
@@ -257,8 +253,6 @@ trellisG.append('g')
       return legendColor(d.type);
     });
 
-    
-
   trellisG
     .selectAll("circle")
     .transition()
@@ -278,8 +272,6 @@ trellisG.append('g')
     .style("stroke", "red")
     .attr("stroke-width", 1)
     .attr("opacity", 0.7);
-
-
 
   circles
     .on("mouseover", function (d) {
@@ -313,7 +305,7 @@ trellisG.append('g')
     .append("text")
     .attr("font-size", "20px")
     .attr("font-weight", "bold")
-    .attr("x", 400)
+    .attr("x", 520)
     .attr("y", function (d, i) {
       return 30 + i * 25;
     })
