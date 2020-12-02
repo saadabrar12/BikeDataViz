@@ -28,7 +28,7 @@ var tooltip = d3
   .offset([-12, 0])
   .html(function (d) {
     //polyline = L.polyline(GPS_routes[d.routeId], { weight: 10 }).addTo(map2);
-    console.log(d);
+    //console.log(d);
     var avaliable = "No";
     if (GPS_routes[d.routeId]) {
       avaliable = "Yes";
@@ -103,13 +103,13 @@ function drawChart(route_info, GPS_routes) {
     })
     .entries(route_info);
 
-  console.log(sumstat);
+  //console.log(sumstat);
 
   allKeys = sumstat.map(function (d) {
     return d.key;
   });
 
-  console.log(allKeys);
+  //console.log(allKeys);
 
   var trellisG = svg
     .selectAll(".trellis")
@@ -120,7 +120,7 @@ function drawChart(route_info, GPS_routes) {
     .attr("transform", function (d, i) {
       // Use indices to space out the trellis groups in 2x2 matrix
       //var tx = (i % 2) * (trellisWidth + padding.l + padding.r) + padding.l;
-      console.log(i);
+      //console.log(i);
       var ty = (i % 2) * (chartHeight + padding.t + padding.b) + padding.t;
       return "translate(" + 0 + "," + ty + ")";
     });
