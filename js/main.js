@@ -12,7 +12,32 @@ var yscale = d3
   .scaleSymlog()
   .rangeRound([chartHeight, chartHeight / 2 + padding.t]);
 var yscale2 = d3.scaleSymlog().rangeRound([chartHeight / 2, padding.t]);
-var rscale = d3.scaleSqrt().range([1, 5]);
+var rscale = d3.scaleSqrt().range([2, 8]);
+
+//prettier-ignore
+var mapMarkers = {
+  "Monroe Park": [37.5466, -77.4505],
+  "Canal Walk": [37.533294, -77.432861],
+  "Pleasants Park-Oregon Hill": [37.5402883, -77.45134145],
+  "Broad & Lombardy": [37.55365954, -77.455663],
+  "Abner Clay Park": [37.5487795, -77.44260818],
+  "Jefferson Ave": [37.53477623, -77.41931267],
+  "Biotech Park": [37.545892, -77.434531],
+  "Broad & Harrison": [37.5460623, -77.4424587],
+  "City Hall": [37.54098825, -77.43296116],
+  "Brown's Island": [37.53541383, -77.44306472],
+  "Center Stage": [37.54132293, -77.43719779],
+  "Sydney Park": [37.54698042, -77.45654494],
+  "Petronius Jones Park-Randolph": [37.54484103, -77.46495903],
+  "Kanawha Plaza": [37.53711659, -77.43928492],
+  "Science Museum": [37.56028749, -77.46618211],
+  "Scott's Addition": [37.56822212, -77.47182548],
+  "Broad & Hermitage": [37.55367891, -77.45568931],
+  "Main Library": [37.54276275, -77.44239662],
+  "Warehouse": [37.5109, -77.4574],
+  "Downtown YMCA": [37.544360,-77.443670],
+};
+
 //X-axis
 xAxisG = svg
   .append("g")
@@ -81,8 +106,8 @@ function scaleDistance(distance) {
   return xscale(distance);
 }
 
-var s = "Abner Clay Park";
-var e = "Abner Clay Park";
+var s = "All";
+var e = "All";
 var t = "All";
 var month = 0;
 var v = 420;
@@ -111,7 +136,10 @@ function onStartChanged() {
   var select = d3.select("#StartAttrSelector").node();
   // Get current value of select element
   s = select.options[select.selectedIndex].value;
-  console.log(s);
+  //console.log(mapMarkers[s]);
+  if (s !== "All" && e !== "All") {
+    map.flyToBounds(L.latLngBounds(mapMarkers[s], mapMarkers[e]));
+  }
   // Update chart with the selected category of letters
   drawHeatmap();
 }
@@ -120,6 +148,9 @@ function onEndChanged() {
   var select = d3.select("#EndAttrSelector").node();
   // Get current value of select element
   e = select.options[select.selectedIndex].value;
+  if (s !== "All" && e !== "All") {
+    map.flyToBounds(L.latLngBounds(mapMarkers[s], mapMarkers[e]));
+  }
   drawHeatmap();
   //console.log(end);
   // Update chart with the selected category of letters
@@ -132,26 +163,6 @@ function onTypeChanged() {
   console.log(t);
   drawHeatmap();
 }
-mapMarkers = {
-  "Monroe Park": [37.5466, 77.4505],
-  "Canal Walk": [37.533294, -77.432861],
-  "Pleasants Park-Oregon Hill": [37.5402883, -77.45134145],
-  "Broad & Lombardy": [37.55365954, -77.455663],
-  "Abner Clay Park": [37.5487795, -77.44260818],
-  "Jefferson Ave": [37.53477623, -77.41931267],
-  "Biotech Park": [37.545892, -77.434531],
-  "Broad & Harrison": [37.5460623, -77.4424587],
-  "City Hall": [37.54098825, -77.43296116],
-  "Brown's Island": [37.53541383, -77.44306472],
-  "Center Stage": [37.54132293, -77.43719779],
-  "Sydney Park": [37.54698042, -77.45654494],
-  "Petronius Jones Park-Randolph": [37.54484103, -77.46495903],
-  "Kanawha Plaza": [37.53711659, -77.43928492],
-  "Science Museum": [37.56028749, -77.46618211],
-  "Scott's Addition": [37.56822212, -77.47182548],
-  "Broad & Hermitage": [37.55367891, -77.45568931],
-  "Main Library": [37.54276275, -77.44239662],
-};
 
 //prettier-ignore
 var startLocMap = {
@@ -417,8 +428,8 @@ function norm(v) {
 function addLocations(monthlyLocData, startLoc, endLoc, v) {
   var locs = [];
   var routeIDs = [];
-  console.log(monthlyLocData);
-  console.log(v);
+  //console.log(monthlyLocData);
+  //console.log(v);
   if (startLoc === 0 && endLoc === 0) {
     monthlyLocData.forEach((element) => {
       locs = locs.concat(element["Locations"]);
@@ -450,9 +461,8 @@ function addLocations(monthlyLocData, startLoc, endLoc, v) {
         monthlyLocData[420 + 21 * (startLoc - 1) + endLoc - 1]["Locations"]
       );
     } else {
-      routeIDs =
-        monthlyLocData[v + 21 * (startLoc - 1) + endLoc - 1]["Route IDs"];
-      locs = monthlyLocData[v + 21 * (startLoc - 1) + endLoc - 1]["Locations"];
+      routeIDs = monthlyLocData[21 * (startLoc - 1) + endLoc - 1]["Route IDs"];
+      locs = monthlyLocData[21 * (startLoc - 1) + endLoc - 1]["Locations"];
     }
   }
   return [routeIDs, locs];
@@ -462,10 +472,10 @@ function extractLocation(monthFilteredData) {
   startLoc = startLocMap[s];
   endLoc = endLocMap[e];
   if (t === "Bike") {
-    //typefiltered = monthFilteredData["place_pairs"].slice(0, 420);
+    typefiltered = monthFilteredData["place_pairs"].slice(0, 420);
     v = 0;
   } else if (t === "Pedelec") {
-    //typefiltered = monthFilteredData["place_pairs"].slice(421, 840);
+    typefiltered = monthFilteredData["place_pairs"].slice(421, 840);
     v = 420;
   } else {
     //All chosen
@@ -475,16 +485,11 @@ function extractLocation(monthFilteredData) {
 
   //console.log("extract location");
 
-  location_info = addLocations(
-    monthFilteredData["place_pairs"],
-    startLoc,
-    endLoc,
-    v
-  );
+  location_info = addLocations(typefiltered, startLoc, endLoc, v);
 
   //Route IDs
   routeids = location_info[0];
-  console.log(routeids);
+  //console.log(routeids);
 
   //Location data
   var old = location_info[1];
@@ -526,7 +531,10 @@ function drawHeatmap() {
   locations = extractedvals[0];
   routeids = extractedvals[1];
   if (typeof locations === "undefined") locations = [];
-  if (routeids !== undefined) updateChart(routeids);
+  if (typeof routeids === "undefined") routeids = [];
+
+  updateChart(routeids);
+  console.log(locations);
 
   drawMarkers();
   if (heat != null) {
@@ -549,7 +557,7 @@ function extractRouteInfo(route_ids) {
 function updateChart(routeids) {
   // Adding x-axis
   data = extractRouteInfo(routeids);
-  console.log(data);
+  //console.log(data);
 
   distanceExtent = d3.extent(data, function (d) {
     return +d.distance;
@@ -580,7 +588,13 @@ function updateChart(routeids) {
     .style("opacity", "1")
     .transition()
     .duration(2000)
-    .call(d3.axisLeft(yscale2));
+    .call(d3.axisLeft(yscale2).ticks(7));
+
+  CostExtent = d3.extent(data, function (d) {
+    return +d.cost;
+  });
+  //console.log(CostExtent);
+  rscale.domain(CostExtent);
 
   var dots = svg.selectAll("circle").data(data);
 

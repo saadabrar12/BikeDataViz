@@ -2,7 +2,7 @@ circle {
   fill: #4672c1;
   stroke: #fff;
   stroke-width: 0.5;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 circle:hover {
   stroke: black;
@@ -106,11 +106,15 @@ select {
 .bg-light {
   background-color: #f8f9fa !important;
 }
+.column {
+  float: left;
+  width: 50%;
+}
 aside {
   width: 20%;
   padding-left: 15px;
   margin-left: 15px;
-  float: left;
+  float: middle;
   font-style: bold;
   background-color: lightgray;
 }

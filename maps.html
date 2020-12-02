@@ -20,6 +20,12 @@
     <link rel="stylesheet" href="magnific-popup/magnific-popup.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/templatemo-style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -57,108 +63,109 @@
       </div>
       <div class="row" id="heatmapviz">
         <div class="column">
-          <aside class="sidepanel" style="width: 300px">
-            <div id="filter">
-              <div class="row">
-                <div>Filter</div>
-              </div>
-              <hr class="divider" />
-              <hr class="divider" />
-              <div class="row">
-                <h5>Starting Location</h5>
-                <select id="StartAttrSelector" onchange="onStartChanged()">
-                  <option value="All">All</option>
-                  <option value="Abner Clay Park">Abner Clay Park</option>
-                  <option value="Biotech Park">Biotech Park</option>
-                  <option value="Broad & Harrison">Broad & Harrison</option>
-                  <option value="Broad & Lombardy">Broad & Lombardy</option>
-                  <option value="Brown's Island">Brown's Island</option>
-                  <option value="Pleasants Park-Oregon Hill">
-                    Pleasants Park-Oregon Hill
-                  </option>
-                  <option value="Canal Walk">Canal Walk</option>
-                  <option value="City Hall">City Hall</option>
-                  <option value="Jefferson Ave">Jefferson Ave</option>
-                  <option value="Kanawha Plaza">Kanawha Plaza</option>
-                  <option value="Monroe Park">Monroe Park</option>
-                  <option value="Petronius Jones Park-Randolph">
-                    Petronius Jones Park-Randolph
-                  </option>
-                  <option value="Pleasants Park-Oregon Hill">
-                    Pleasants Park-Oregon Hill
-                  </option>
-                  <option value="Science Museum">Science Museum</option>
-                  <option value="Scott's Addition">Scott's Addition</option>
-                  <option value="Sydney Park">Sydney Park</option>
-                  <option value="Warehouse">Warehouse</option>
-                </select>
-              </div>
-              <hr class="divider" />
-              <div class="row">
-                <h5>Ending Location</h5>
-                <select id="EndAttrSelector" onchange="onEndChanged()">
-                  <option value="All">All</option>
-                  <option value="Abner Clay Park">Abner Clay Park</option>
-                  <option value="Biotech Park">Biotech Park</option>
-                  <option value="Broad & Harrison">Broad & Harrison</option>
-                  <option value="Broad & Lombardy">Broad & Lombardy</option>
-                  <option value="Brown's Island">Brown's Island</option>
-                  <option value="Pleasants Park-Oregon Hill">
-                    Pleasants Park-Oregon Hill
-                  </option>
-                  <option value="Canal Walk">Canal Walk</option>
-                  <option value="City Hall">City Hall</option>
-                  <option value="Jefferson Ave">Jefferson Ave</option>
-                  <option value="Kanawha Plaza">Kanawha Plaza</option>
-                  <option value="Monroe Park">Monroe Park</option>
-                  <option value="Petronius Jones Park-Randolph">
-                    Petronius Jones Park-Randolph
-                  </option>
-                  <option value="Pleasants Park-Oregon Hill">
-                    Pleasants Park-Oregon Hill
-                  </option>
-                  <option value="Science Museum">Science Museum</option>
-                  <option value="Scott's Addition">Scott's Addition</option>
-                  <option value="Sydney Park">Sydney Park</option>
-                  <option value="Downtown YMCA">Downtown YMCA</option>
-                  <option value="Warehouse">Warehouse</option>
-                </select>
-              </div>
-              <hr class="divider" />
-              <div class="row">
-                <h5>Bike Type</h5>
-
-                <select id="BikeAttrSelector" onchange="onTypeChanged()">
-                  <option value="All">All</option>
-                  <option value="Pedelec">Pedelec</option>
-                  <option value="Bike">Bike</option>
-                </select>
-              </div>
-              <div class="row" id="sliderContainer">
-                <input
-                  id="timeslide"
-                  type="range"
-                  min="0"
-                  max="8"
-                  value="0"
-                  step="1"
-                /><br />
-                <span id="range">January</span>
-              </div>
-            </div>
-          </aside>
+          <svg width="600" height="600" , style="border: 1px solid #777"></svg>
         </div>
         <div class="column">
           <section class="container">
             <div
               id="map"
-              style="height: 600px; width: 900px; border: 1px solid #777"
+              style="height: 600px; width: 800px; border: 1px solid #777"
             ></div>
           </section>
         </div>
       </div>
     </section>
-    <svg width="900" height="600" , style="border: 1px solid #777"></svg>
+    <div class="container">
+      <div class="panel panel-default" style="width: 100%">
+        <div id="panel-head" class="panel-heading">
+          <h4>Filters</h4>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col">
+              <h5>Starting Location</h5>
+              <select id="StartAttrSelector" onchange="onStartChanged()">
+                <option value="All">All</option>
+                <option value="Abner Clay Park">Abner Clay Park</option>
+                <option value="Biotech Park">Biotech Park</option>
+                <option value="Broad & Harrison">Broad & Harrison</option>
+                <option value="Broad & Lombardy">Broad & Lombardy</option>
+                <option value="Brown's Island">Brown's Island</option>
+                <option value="Pleasants Park-Oregon Hill">
+                  Pleasants Park-Oregon Hill
+                </option>
+                <option value="Canal Walk">Canal Walk</option>
+                <option value="City Hall">City Hall</option>
+                <option value="Jefferson Ave">Jefferson Ave</option>
+                <option value="Kanawha Plaza">Kanawha Plaza</option>
+                <option value="Monroe Park">Monroe Park</option>
+                <option value="Petronius Jones Park-Randolph">
+                  Petronius Jones Park-Randolph
+                </option>
+                <option value="Pleasants Park-Oregon Hill">
+                  Pleasants Park-Oregon Hill
+                </option>
+                <option value="Science Museum">Science Museum</option>
+                <option value="Scott's Addition">Scott's Addition</option>
+                <option value="Sydney Park">Sydney Park</option>
+                <option value="Warehouse">Warehouse</option>
+              </select>
+            </div>
+            <div class="col">
+              <h5>Ending Location</h5>
+              <select id="EndAttrSelector" onchange="onEndChanged()">
+                <option value="All">All</option>
+                <option value="Abner Clay Park">Abner Clay Park</option>
+                <option value="Biotech Park">Biotech Park</option>
+                <option value="Broad & Harrison">Broad & Harrison</option>
+                <option value="Broad & Lombardy">Broad & Lombardy</option>
+                <option value="Brown's Island">Brown's Island</option>
+                <option value="Pleasants Park-Oregon Hill">
+                  Pleasants Park-Oregon Hill
+                </option>
+                <option value="Canal Walk">Canal Walk</option>
+                <option value="City Hall">City Hall</option>
+                <option value="Jefferson Ave">Jefferson Ave</option>
+                <option value="Kanawha Plaza">Kanawha Plaza</option>
+                <option value="Monroe Park">Monroe Park</option>
+                <option value="Petronius Jones Park-Randolph">
+                  Petronius Jones Park-Randolph
+                </option>
+                <option value="Pleasants Park-Oregon Hill">
+                  Pleasants Park-Oregon Hill
+                </option>
+                <option value="Science Museum">Science Museum</option>
+                <option value="Scott's Addition">Scott's Addition</option>
+                <option value="Sydney Park">Sydney Park</option>
+                <option value="Downtown YMCA">Downtown YMCA</option>
+                <option value="Warehouse">Warehouse</option>
+              </select>
+            </div>
+            <div class="col">
+              <h5>Bike Type</h5>
+
+              <select id="BikeAttrSelector" onchange="onTypeChanged()">
+                <option value="All">All</option>
+                <option value="Pedelec">Pedelec</option>
+                <option value="Bike">Bike</option>
+              </select>
+            </div>
+            <div class="col" id="sliderContainer">
+              <h5>Months</h5>
+              <input
+                id="timeslide"
+                type="range"
+                min="0"
+                max="8"
+                value="0"
+                step="1"
+              /><br />
+              <span id="range">April</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
   <script
     src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
