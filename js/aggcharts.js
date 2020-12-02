@@ -505,4 +505,5 @@ function drawbarchart(month) {
       return 2000;
     })
     .style("opacity", "1");
+    
 }
