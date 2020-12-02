@@ -76,13 +76,13 @@
       </div>
     </section>
     <div class="container">
-      <div class="panel panel-default" style="width: 100%">
+      <div class="panel" style="width: 100%">
         <div id="panel-head" class="panel-heading">
           <h4>Filters</h4>
         </div>
         <div class="panel-body">
           <div class="row">
-            <div class="col">
+            <div class="box">
               <h5>Starting Location</h5>
               <select id="StartAttrSelector" onchange="onStartChanged()">
                 <option value="All">All</option>
@@ -111,7 +111,7 @@
                 <option value="Warehouse">Warehouse</option>
               </select>
             </div>
-            <div class="col">
+            <div class="box">
               <h5>Ending Location</h5>
               <select id="EndAttrSelector" onchange="onEndChanged()">
                 <option value="All">All</option>
@@ -141,7 +141,7 @@
                 <option value="Warehouse">Warehouse</option>
               </select>
             </div>
-            <div class="col">
+            <div class="box">
               <h5>Bike Type</h5>
 
               <select id="BikeAttrSelector" onchange="onTypeChanged()">
@@ -190,4 +190,6 @@
   <script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="./js/d3-tip.js"></script>
   <script src="./js/main.js"></script>
+  <script src="./js/mainpage.js"></script> 
+  
 </html>
