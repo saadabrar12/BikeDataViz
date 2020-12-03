@@ -213,8 +213,8 @@ function drawChart(route_info, GPS_routes) {
         [padding.l, 0],
         [chartWidth, chartHeight],
       ])
-        //.on("start brush", updateChart)
-      .on("end", ()=>{updateChart; brushend()})
+      //.on("start brush", updateChart)
+      .on("end", brushend)
   );
   //Adding size for cost
   CostExtent = d3.extent(route_info, function (d) {
@@ -367,6 +367,7 @@ function drawChart(route_info, GPS_routes) {
     ); // This return TRUE or FALSE depending on if the points is in the selected area
   }
   function brushend() {
+    updateChart();
     if (!d3.event.selection) {
       polylines.removeFrom(map2);
     }
