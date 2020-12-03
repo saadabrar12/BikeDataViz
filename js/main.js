@@ -32,7 +32,7 @@ var mapMarkers = {
   "Kanawha Plaza": [37.53711659, -77.43928492],
   "Science Museum": [37.56028749, -77.46618211],
   "Scott's Addition": [37.56822212, -77.47182548],
-  "Broad & Hermitage": [37.55367891, -77.45568931],
+  "Broad & Hermitage": [37.556653, -77.460819],
   "Main Library": [37.54276275, -77.44239662],
   "Warehouse": [37.5109, -77.4574],
   "Downtown YMCA": [37.544360,-77.443670],
@@ -160,7 +160,7 @@ function onEndChanged() {
 function onTypeChanged() {
   var select = d3.select("#BikeAttrSelector").node();
   t = select.options[select.selectedIndex].value;
-  console.log(t);
+  //console.log(t);
   drawHeatmap();
 }
 
@@ -404,7 +404,7 @@ function drawMarkers() {
     marker.bindPopup(popup);
     marker.on("click", function (e) {
       currentMarker = k;
-      console.log(currentMarker);
+      //console.log(currentMarker);
     });
     marker.on("mouseover", function (e) {
       //console.log(k);
@@ -522,7 +522,7 @@ function extractLocation(monthFilteredData) {
     }
     // end of loop
   }
-  console.log("GPS array size " + resample.length);
+  //console.log("GPS array size " + resample.length);
   return [resample, routeids];
 }
 
@@ -536,7 +536,7 @@ function drawHeatmap() {
   if (typeof routeids === "undefined") routeids = [];
 
   updateChart(routeids);
-  console.log(locations);
+  //console.log(locations);
 
   drawMarkers();
   if (heat != null) {
