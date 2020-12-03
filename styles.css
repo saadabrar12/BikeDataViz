@@ -1,5 +1,10 @@
 body {
   background-color: #eee6dd;
+  
+    padding-top: 100px;
+    color: black;
+    text-align: center;
+  
 }
 circle {
   fill: #4672c1;
@@ -81,8 +86,9 @@ path.stroke-polyline {
   -ms-flex-direction: row-reverse !important;
   flex-direction: row-reverse !important;
 }
-
+.navbar-default { margin : 10px !important; }
 .navbar {
+  margin-bottom : 60px !important;
   position: relative;
   display: -ms-flexbox;
   display: flex;
@@ -125,10 +131,7 @@ aside {
 row {
   box-sizing: border-box;
 }
-body {
-  color: black;
-  text-align: center;
-}
+
 h5 {
   display: block;
   font-size: 0.83em;
