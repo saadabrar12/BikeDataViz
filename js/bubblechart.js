@@ -213,8 +213,8 @@ function drawChart(route_info, GPS_routes) {
         [padding.l, 0],
         [chartWidth, chartHeight],
       ])
-      .on("start brush", updateChart)
-      .on("end", brushend)
+        //.on("start brush", updateChart)
+      .on("end", ()=>{updateChart; brushend()})
   );
   //Adding size for cost
   CostExtent = d3.extent(route_info, function (d) {
@@ -320,6 +320,7 @@ function drawChart(route_info, GPS_routes) {
 
   function updateChart() {
     extent = d3.event.selection;
+    
     //Removing previous mappings
     polylines.removeFrom(map2);
     polylines.clearLayers();
