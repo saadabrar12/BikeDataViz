@@ -320,6 +320,7 @@ function drawChart(route_info, GPS_routes) {
 
   function updateChart() {
     extent = d3.event.selection;
+    
     //Removing previous mappings
     polylines.removeFrom(map2);
     polylines.clearLayers();

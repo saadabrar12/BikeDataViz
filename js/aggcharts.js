@@ -8,7 +8,7 @@ var new_month = "April";
 var margin = { top: 50, right: 20, bottom: 30, left: 100 };
 var width =
   document.getElementById("svg1").offsetWidth - margin.left - margin.right; //800 - margin.left - margin.right,
-var height = width / 2.66 - margin.top - margin.bottom;
+var height = width / 1.66 - margin.top - margin.bottom;
 
 var x, y, xAxis, yAxis, color;
 var svg;
@@ -210,21 +210,24 @@ function drawaggchart(aggchartData) {
     })
     .style("opacity", "1");
 
-  svg
-    .append("text")
-    .attr("class", "axis-label")
-    .text("Ride Counts")
-    .attr("transform", "translate(" + [-40, 200] + ") rotate(-90)")
-    .attr("font-size", "15px")
-    .style("fill", "black");
+      // text label for the x axis
+  svg.append("text")             
+  .attr("transform",
+        "translate(" + (width/2) + " ," + 
+                       (height+margin.bottom) + ")")
+  .style("text-anchor", "middle")
+  .text("Months");
 
-  svg
-    .append("text")
-    .attr("class", "axis-label")
-    .text("Months")
-    .attr("transform", "translate(" + [320, 350] + ") ")
-    .attr("font-size", "15px")
-    .style("fill", "black");
+
+// text label for the y axis
+svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left)
+  .attr("x",0 - (height / 2))
+  .attr("dy", "1em")
+  .style("text-anchor", "middle")
+  .text("Ride Counts");  
+
 }
 
 function initlinechart(linechartData) {
@@ -294,22 +297,26 @@ function drawlinechart(month) {
     .duration(2000)
     .call(line_yAxis);
 
-  line_svg
-    .append("text")
-    .attr("class", "axis-label")
-    .text("Ride Counts")
-    .attr("transform", "translate(" + [-40, 200] + ") rotate(-90)")
-    .attr("font-size", "15px")
-    .style("fill", "black");
+          // text label for the x axis
+          line_svg.append("text")             
+  .attr("transform",
+        "translate(" + (width/2) + " ," + 
+                       (height+margin.bottom) + ")")
+  .style("text-anchor", "middle")
+  .text("Hour of the Day");
 
-  line_svg
-    .append("text")
-    .attr("class", "axis-label")
-    .text("Hour of the day")
-    .attr("transform", "translate(" + [300, 350] + ") ")
-    .attr("font-size", "15px")
-    .style("fill", "black");
 
+// text label for the y axis
+line_svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left)
+  .attr("x",0 - (height / 2))
+  .attr("dy", "1em")
+  .style("text-anchor", "middle")
+  .text("Ride Counts");  
+
+
+  
   var groups = line_svg.selectAll("foo").data(selected_month.values);
   //    .enter()
   //    .append("g");
@@ -452,14 +459,30 @@ function drawbarchart(month) {
     .duration(2000)
     .call(bar_xAxis);
 
-  bar_svg
-    .append("text")
-    .attr("class", "axis-label")
-    .text("Ride Counts")
-    .attr("transform", "translate(" + [300, 350] + ")")
-    .attr("font-size", "15px")
-    .style("fill", "black");
+    bar_svg
+    .selectAll(".yaxis")
+    .style("opacity", "1")
+    .transition()
+    .duration(2000)
+    .call(bar_yAxis);
 
+          // text label for the x axis
+    bar_svg.append("text")             
+    .attr("transform",
+    "translate(" + (width/2) + " ," + 
+                  (height+margin.bottom) + ")")
+    .style("text-anchor", "middle")
+    .text("Ride Counts");
+
+
+// text label for the y axis
+bar_svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left-5)
+  .attr("x",0 - (height / 2))
+  .attr("dy", "1em")
+  .style("text-anchor", "middle")
+  .text("Places");  
   //bar_xAxis = d3.axisBottom().scale(d3.scaleLinear().domain([0,d3.max(data, d => d.total)]).rangeRound([0, width]));
   //.tickFormat(d3.timeFormat("Month %V"))
   //.tickValues([0,d3.max()]);
