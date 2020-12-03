@@ -15,13 +15,21 @@ var svg;
 var bar_x,y, bar_xAxis, bar_yAxis, bar_color;
 var bar_svg;
 
-Promise.all([d3.json("aggchartdata.json")]).then(function (data) {
+Promise.all([d3.json("./data/aggchartdata.json"),d3.json("./data/barchartdata.json"),d3.json("./data/colchartdata.json"),]).then(function (data) {
     aggchartData = data[0];
+    linechartData = data[1];
+    colchartData = data[2];
     console.log("Hello!");
     //console.log(aggchartData['4']);
-    
+
+    drawaggchart(aggchartData);    
+    initlinechart(linechartData);
+    initcolchart(colchartData);
 
 
+});
+
+function drawaggchart(aggchartData){
     var x0  = d3.scaleBand().rangeRound([0, width], .5);
     var x1  = d3.scaleBand()
                 .padding(0.25);
@@ -142,13 +150,11 @@ Promise.all([d3.json("aggchartdata.json")]).then(function (data) {
             .text(function(d) {return d; });
         
         legend.transition().duration(500).delay(function(d,i){ return 1300 + 100 * i; }).style("opacity","1");
-        
-
-
-});
+    
+}
   
-Promise.all([d3.json("barchartdata.json")]).then(function (data) {
-    linechartData = data[0];
+function initlinechart(linechartData) {
+    //linechartData = data[0];
     console.log("Hello!");
     
     
@@ -183,7 +189,7 @@ Promise.all([d3.json("barchartdata.json")]).then(function (data) {
     drawlinechart(new_month);
 
   
-});
+}
 
 function drawlinechart(month){
     
@@ -239,8 +245,8 @@ function drawlinechart(month){
     
 }
 
-Promise.all([d3.json("colchartdata.json")]).then(function (data) {
-    colchartData = data[0];
+function initcolchart(colchartdata) {
+    //colchartData = data[0];
     console.log("Hello!");
     console.log(colchartData);
     
@@ -273,7 +279,7 @@ Promise.all([d3.json("colchartdata.json")]).then(function (data) {
 
     drawbarchart(new_month);
        
-});
+}
 
 
 function drawbarchart(month){

@@ -5,21 +5,37 @@ var colchartData;
 var prev_month = "April";
 var new_month = "April";
 
-var margin = { top: 50, right: 20, bottom: 30, left: 100 },
-  width = 800 - margin.left - margin.right,
-  height = 400 - margin.top - margin.bottom;
+var margin = { top: 50, right: 20, bottom: 30, left: 100 };
+var width =
+  document.getElementById("svg1").offsetWidth - margin.left - margin.right; //800 - margin.left - margin.right,
+var height = width / 2.66 - margin.top - margin.bottom;
 
 var x, y, xAxis, yAxis, color;
 var svg;
 
-var bar_x, y, bar_xAxis, bar_yAxis, bar_color;
+var line_x, line_y, line_xAxis, line_yAxis, line_color;
+var line_svg;
+
+var bar_x, bar_y, bar_xAxis, bar_yAxis, bar_color;
 var bar_svg;
 
-Promise.all([d3.json("./data/aggchartdata.json")]).then(function (data) {
+Promise.all([
+  d3.json("./data/aggchartdata.json"),
+  d3.json("./data/barchartdata.json"),
+  d3.json("./data/colchartdata.json"),
+]).then(function (data) {
   aggchartData = data[0];
+  linechartData = data[1];
+  colchartData = data[2];
   console.log("Hello!");
-  console.log(aggchartData["4"]);
+  //console.log(aggchartData['4']);
 
+  drawaggchart(aggchartData);
+  initlinechart(linechartData);
+  initcolchart(colchartData);
+});
+
+function drawaggchart(aggchartData) {
   var x0 = d3.scaleBand().rangeRound([0, width], 0.5);
   var x1 = d3.scaleBand().padding(0.25);
   var y = d3.scaleLinear().rangeRound([height, 0]);
@@ -30,8 +46,9 @@ Promise.all([d3.json("./data/aggchartdata.json")]).then(function (data) {
 
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  var svg = d3
-    .select("#svg1")
+  var svg = d3.select("#svg1").append("svg");
+  //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  svg = svg
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -76,6 +93,7 @@ Promise.all([d3.json("./data/aggchartdata.json")]).then(function (data) {
     .attr("class", "y axis")
     .style("opacity", "1")
     .call(yAxis)
+    .attr("transform", "translate(" + 0 + "," + 0 + ")")
     .append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 6)
@@ -207,45 +225,46 @@ Promise.all([d3.json("./data/aggchartdata.json")]).then(function (data) {
     .attr("transform", "translate(" + [320, 350] + ") ")
     .attr("font-size", "15px")
     .style("fill", "black");
-});
+}
 
-Promise.all([d3.json("./data/barchartdata.json")]).then(function (data) {
-  linechartData = data[0];
+function initlinechart(linechartData) {
+  //linechartData = data[0];
   console.log("Hello!");
 
-  x = d3.scaleBand().rangeRound([0, width], 0.5); //().range([0,width]);
+  line_x = d3.scaleBand().rangeRound([0, width], 0.5); //().range([0,width]);
 
-  y = d3.scaleLinear().rangeRound([height, 0]);
+  line_y = d3.scaleLinear().rangeRound([height, 0]);
 
-  color = d3.scaleOrdinal(d3.schemeCategory10);
+  line_color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  svg = d3
-    .select("#svg2")
+  line_svg = d3.select("#svg2").append("svg");
+
+  line_svg = line_svg
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+  console.log(line_svg);
   var hournames = linechartData[0].values[0].values.map(function (d) {
     return d.hour;
   });
-  x.domain(hournames);
-  xAxis = d3
+  line_x.domain(hournames);
+  line_xAxis = d3
     .axisBottom()
-    .scale(x)
+    .scale(line_x)
     //.tickFormat(d3.timeFormat("Month %V"))
     .tickValues(hournames);
 
-  svg
+  line_svg
     .append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .call(line_xAxis);
 
-  svg.append("g").attr("class", "yaxis");
+  line_svg.append("g").attr("class", "yaxis");
 
   drawlinechart(new_month);
-});
+}
 
 function drawlinechart(month) {
   months = linechartData.map(function (d) {
@@ -261,21 +280,21 @@ function drawlinechart(month) {
     return d.type;
   });
 
-  y.domain([
+  line_y.domain([
     0,
     d3.max(selected_month.values, (d) => d3.max(d.values, (key) => key.count)),
   ]);
 
-  yAxis = d3.axisLeft().scale(y);
+  line_yAxis = d3.axisLeft().scale(line_y);
 
-  svg
+  line_svg
     .selectAll(".yaxis")
     .style("opacity", "1")
     .transition()
     .duration(2000)
-    .call(yAxis);
+    .call(line_yAxis);
 
-  svg
+  line_svg
     .append("text")
     .attr("class", "axis-label")
     .text("Ride Counts")
@@ -283,7 +302,7 @@ function drawlinechart(month) {
     .attr("font-size", "15px")
     .style("fill", "black");
 
-  svg
+  line_svg
     .append("text")
     .attr("class", "axis-label")
     .text("Hour of the day")
@@ -291,7 +310,7 @@ function drawlinechart(month) {
     .attr("font-size", "15px")
     .style("fill", "black");
 
-  var groups = svg.selectAll("foo").data(selected_month.values);
+  var groups = line_svg.selectAll("foo").data(selected_month.values);
   //    .enter()
   //    .append("g");
 
@@ -299,13 +318,13 @@ function drawlinechart(month) {
   var line = d3
     .line()
     .x(function (d) {
-      return x(d.hour);
+      return line_x(d.hour);
     })
     .y(function (d) {
-      return y(d.count);
+      return line_y(d.count);
     });
 
-  this.svg
+  this.line_svg
     .selectAll("path")
 
     .transition()
@@ -321,14 +340,15 @@ function drawlinechart(month) {
     .duration(2000)
     .attr("d", (d) => line(d.values))
     .attr("fill", "none")
-    .attr("stroke", (d, i) => color(i))
+    .attr("stroke", (d, i) => line_color(i))
     .attr("stroke-width", 2.5);
 }
 
-Promise.all([d3.json("./data/colchartdata.json")]).then(function (data) {
-  colchartData = data[0];
+function initcolchart(colchartdata) {
+  //colchartData = data[0];
   console.log("Hello!");
-  console.log(colchartData);
+  console.log(document.getElementById("svg3").offsetWidth);
+  //console.log(colchartData);
 
   bar_y = d3
     .scaleBand()
@@ -339,9 +359,12 @@ Promise.all([d3.json("./data/colchartdata.json")]).then(function (data) {
 
   bar_x = d3.scaleLinear().rangeRound([0, width]);
 
-  bar_svg = d3
-    .select("#svg3")
-    .attr("width", width + margin.left + margin.right)
+  //style="display: block;"
+  bar_svg = d3.select("#svg3").append("svg").style("display", "block");
+  bar_svg = bar_svg
+    .attr("width", "100%")
+    //.attr('height', "100%")
+    //.attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -357,7 +380,7 @@ Promise.all([d3.json("./data/colchartdata.json")]).then(function (data) {
     .attr("transform", "translate(0," + height + ")");
 
   drawbarchart(new_month);
-});
+}
 
 function drawbarchart(month) {
   var bar_data = colchartData[months.indexOf(month)].values;
@@ -510,16 +533,17 @@ function drawbarchart(month) {
     .data(subgroups.reverse())
     .enter()
     .append("g")
-    .attr("class", "legend")
-    //.attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
+    .attr("class", "legends")
+
+    .attr("transform", function (d, i) {
+      return "translate(0," + i * 20 + ")";
+    })
     .style("opacity", "0");
 
   legend
     .append("rect")
-    .attr("y", -20)
-    .attr("x", function (d, i) {
-      return margin.left + i * 70 - 30;
-    })
+    .attr("y", height - 120)
+    .attr("x", width - 120)
     .attr("width", 18)
     .attr("height", 18)
     .style("fill", function (d) {
@@ -528,15 +552,16 @@ function drawbarchart(month) {
 
   legend
     .append("text")
-    .attr("y", -20)
+    .attr("y", height - 110)
     .attr("x", function (d, i) {
-      return margin.left + i * 70 - 70;
+      return width - 100;
     })
-    .attr("dy", ".35em")
+    //.attr("dy", ".35em")
     .style("text-anchor", "start")
     .text(function (d) {
       return d;
     });
+  //.style("font-size", 30);
 
   legend
     .transition()
