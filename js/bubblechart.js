@@ -83,6 +83,10 @@ Promise.all([
   var route_info = data[0];
   GPS_routes = data[1];
 
+  //route_info = route_info.filter(function (d) {
+  //  return GPS_routes[d.routeId] != undefined;
+  //});
+
   svg
     .append("g")
     .attr("class", "xaxis")
@@ -320,7 +324,7 @@ function drawChart(route_info, GPS_routes) {
 
   function updateChart() {
     extent = d3.event.selection;
-    
+
     //Removing previous mappings
     polylines.removeFrom(map2);
     polylines.clearLayers();
@@ -341,6 +345,7 @@ function drawChart(route_info, GPS_routes) {
             opacity: 0.6,
             linecap: "round",
             color: legendColor(d.type),
+            offset: -5,
           });
           map2.flyToBounds(polyline.getBounds());
           //polyline.addTo(map2);

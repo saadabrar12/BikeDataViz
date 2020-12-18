@@ -406,6 +406,7 @@ function drawMarkers() {
       currentMarker = k;
       //console.log(currentMarker);
     });
+    /*
     marker.on("mouseover", function (e) {
       //console.log(k);
       this.openPopup();
@@ -413,6 +414,7 @@ function drawMarkers() {
     marker.on("mouseout", function (e) {
       this.closePopup();
     });
+    */
     //popup.openPopup();
   }
   updateIcon();
